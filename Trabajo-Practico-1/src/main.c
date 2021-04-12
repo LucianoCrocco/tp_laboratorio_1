@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Funciones.h"
-#include "Validaciones.h"
 
 int main (void){
 
@@ -23,8 +22,8 @@ int main (void){
 	int flagNumeroUno;
 	int flagNumeroDos;
 	int flagCalculo;
-	int validacion;
-	int auxiliar;
+	//int validacion;
+	//int auxiliar;
 
 	setbuf(stdout,NULL);
 
@@ -51,26 +50,21 @@ int main (void){
 					flagCalculo++;
 					suma=sumarNumerosFloat(numeroUno,numeroDos);
 					resta=restarNumerosFloat(numeroUno,numeroDos);
+					//Validar division por 0.
 					division=dividirNumerosFloat(numeroUno,numeroDos);
 					multiplicacion=multiplicarNumerosFloat(numeroUno,numeroDos);
-					// Valido ambos numeros para saber si despues de la , tiene 0, si tiene 0 lo convierto a un integer
-					validacion=validarEsNumeroRacional(numeroUno, 51);
-					if(validacion == -1){
-						auxiliar = (int) numeroUno;
-						factorialNumeroUno = calcularFactorial(auxiliar);
-					} else {
+					printf("\n---OPERACIONES CALCULADAS---\n");
+					//Validar que despues del . del flotante no haya numeros.
+					if(numeroUno < 1){
 						factorialNumeroUno = -1;
-					}
-					validacion=validarEsNumeroRacional(numeroDos, 51);
-					if(validacion == -1){
-						auxiliar = (int) numeroDos;
-						factorialNumeroDos = calcularFactorial(auxiliar);
 					} else {
-						factorialNumeroDos = -1;
+						factorialNumeroUno=calcularFactorial(numeroUno);
 					}
-
-				} else {
-					printf("Error... Ingrese ambos numeros primeros\n");
+					if(numeroDos < 1){
+						factorialNumeroDos = -1;
+					} else {
+						factorialNumeroDos=calcularFactorial(numeroDos);
+					}
 				}
 				break;
 			case 4:
@@ -79,26 +73,26 @@ int main (void){
 					printf("La resta de ambos numeros es: %.2f\n", resta);
 					printf("La division de ambos numeros es: %.2f\n", division);
 					printf("La multiplicacion de ambos numeros es: %.2f\n", multiplicacion);
-					if(factorialNumeroUno == -1){
-						printf("No se puede realizar el factorial del numero %.2f porque es un numero racional\n", numeroUno);
+					if(factorialNumeroUno == -1 || numeroUno > 12){
+						printf("No se puede calcular el factorial del numero %.2f por ser negativo o estar fuera de rango\n", numeroUno);
 					} else {
-						printf("El factorial de %.0f es %d", numeroUno,factorialNumeroUno);
+						printf("El factorial del numero %.2f es: %d\n", numeroUno, factorialNumeroUno);
 					}
-					if(factorialNumeroUno == -1){
-						printf("No se puede realizar el factorial del numero %.2f porque es un numero racional\n", numeroDos);
+					if(factorialNumeroDos == -1 || numeroDos > 12){
+						printf("No se puede calcular el factorial del numero %.2f por ser negativo o estar fuera de rango\n",numeroDos);
 					} else {
-						printf("El factorial de %.0f es %d", numeroDos,factorialNumeroDos);
+						printf("El factorial del numero %.2f es: %d\n", numeroDos, factorialNumeroDos);
 					}
-
 				} else {
-					printf("Error... Calcule los resultados primero\n");
+					printf("\n---NO calculo las operaciones---\n");
 				}
 				break;
 			default:
 				printf("\nGracias por usar el programa\n");
 				break;
-		}
-	} while(opcion != 5);
+			}
+		}while(opcion != 5);
 
 	return EXIT_SUCCESS;
 }
+
