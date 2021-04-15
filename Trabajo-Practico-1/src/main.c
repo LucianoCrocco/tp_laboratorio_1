@@ -10,6 +10,8 @@
 
 int main (void){
 
+	setbuf(stdout,NULL);
+
 	int opcion;
 	float numeroUno;
 	float numeroDos;
@@ -17,74 +19,99 @@ int main (void){
 	float resta;
 	float division;
 	float multiplicacion;
-	int factorialNumeroUno;
-	int factorialNumeroDos;
+	unsigned long int factorialNumeroUno;
+	unsigned long int factorialNumeroDos;
 	int flagNumeroUno;
 	int flagNumeroDos;
 	int flagCalculo;
-	//int validacion;
-	//int auxiliar;
+	int flagMostrarResultado;
+	int flagDivision;
+	int validacion;
 
-	setbuf(stdout,NULL);
 
 	flagNumeroUno = 0;
 	flagNumeroDos = 0;
 	flagCalculo = 0;
+	flagDivision = 0;
 
 	printf("Bienvenido!\n");
 
 	do {
-		opcion = pedirEnteroConRango("1. Ingresar el primer numero\n2. Ingresar el segundo numero\n3. Calcular todas las opciones\n4. Mostrar resultados\n5. Salir: ", "\aError... Ingreso una opcion invalida", 1, 5);
+		opcion = menu();
 
 		switch(opcion){
 			case 1:
-				numeroUno=pedirFloat("Ingrese el primer numero: ", "Error... Ingreso un numero invalido.");
+				numeroUno=pedirFloat("Ingrese el primer numero: ");
 				flagNumeroUno++;
 				break;
 			case 2:
-				numeroDos=pedirFloat("Ingrese el segundo numero: ", "Error... Ingreso un numero invalido.");
+				numeroDos=pedirFloat("Ingrese el segundo numero: ");
 				flagNumeroDos++;
 				break;
 			case 3:
 				if(flagNumeroUno != 0 && flagNumeroDos != 0){
 					flagCalculo++;
+
 					suma=sumarNumerosFloat(numeroUno,numeroDos);
+
 					resta=restarNumerosFloat(numeroUno,numeroDos);
-					//Validar division por 0.
-					division=dividirNumerosFloat(numeroUno,numeroDos);
+
+					if(numeroDos != 0){
+						division=dividirNumerosFloat(numeroUno,numeroDos);
+						flagDivision++;
+					}
+
 					multiplicacion=multiplicarNumerosFloat(numeroUno,numeroDos);
-					printf("\n---OPERACIONES CALCULADAS---\n");
-					//Validar que despues del . del flotante no haya numeros.
-					if(numeroUno < 1){
+
+
+					validacion=comprobarEsNaturalFloat(numeroUno);
+					if(numeroUno < 0 || validacion == -1){
 						factorialNumeroUno = -1;
 					} else {
-						factorialNumeroUno=calcularFactorial(numeroUno);
+						factorialNumeroUno=calcularFactorial((int)numeroUno);
 					}
-					if(numeroDos < 1){
+
+					validacion=comprobarEsNaturalFloat(numeroDos);
+					if(numeroDos < 0  || validacion == -1){
 						factorialNumeroDos = -1;
 					} else {
-						factorialNumeroDos=calcularFactorial(numeroDos);
+						factorialNumeroDos = calcularFactorial(numeroDos);
 					}
+
+					printf("\n---OPERACIONES CALCULADAS---\n");
+				} else {
+					printf("\nError... Primero ingrese el numero uno y dos\n");
 				}
 				break;
 			case 4:
 				if(flagCalculo != 0){
-					printf("La suma de ambos numeros es: %.2f\n", suma);
+
+					printf("\nLa suma de ambos numeros es: %.2f\n", suma);
+
 					printf("La resta de ambos numeros es: %.2f\n", resta);
-					printf("La division de ambos numeros es: %.2f\n", division);
+
+					if(flagDivision != 0){
+						printf("La division de ambos numeros es: %.2f\n", division);
+					} else {
+						printf("No se puede calcular la división porque el segundo numero es 0\n");
+					}
+
 					printf("La multiplicacion de ambos numeros es: %.2f\n", multiplicacion);
+
 					if(factorialNumeroUno == -1 || numeroUno > 12){
-						printf("No se puede calcular el factorial del numero %.2f por ser negativo o estar fuera de rango\n", numeroUno);
+						printf("No se puede calcular el factorial del numero %.2f por ser negativo, estar fuera de rango o ser decimal\n", numeroUno);
 					} else {
-						printf("El factorial del numero %.2f es: %d\n", numeroUno, factorialNumeroUno);
+						printf("El factorial del numero %.2f es: %ld\n", numeroUno, factorialNumeroUno);
 					}
+
 					if(factorialNumeroDos == -1 || numeroDos > 12){
-						printf("No se puede calcular el factorial del numero %.2f por ser negativo o estar fuera de rango\n",numeroDos);
+						printf("No se puede calcular el factorial del numero %.2f por ser negativo, estar fuera de rango o ser decimal\n",numeroDos);
 					} else {
-						printf("El factorial del numero %.2f es: %d\n", numeroDos, factorialNumeroDos);
+						printf("El factorial del numero %.2f es: %ld\n", numeroDos, factorialNumeroDos);
 					}
+
 				} else {
-					printf("\n---NO calculo las operaciones---\n");
+						printf("\n---NO realizo el calculo las operaciones---\n");
 				}
 				break;
 			default:
@@ -95,4 +122,3 @@ int main (void){
 
 	return EXIT_SUCCESS;
 }
-
