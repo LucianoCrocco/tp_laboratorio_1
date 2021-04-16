@@ -24,7 +24,6 @@ int main (void){
 	int flagNumeroUno;
 	int flagNumeroDos;
 	int flagCalculo;
-	int flagMostrarResultado;
 	int flagDivision;
 	int validacion;
 
@@ -49,7 +48,9 @@ int main (void){
 				flagNumeroDos++;
 				break;
 			case 3:
+
 				if(flagNumeroUno != 0 && flagNumeroDos != 0){
+
 					flagCalculo++;
 
 					suma=sumarNumerosFloat(numeroUno,numeroDos);
@@ -78,6 +79,8 @@ int main (void){
 						factorialNumeroDos = calcularFactorial(numeroDos);
 					}
 
+					system("clear");
+
 					printf("\n---OPERACIONES CALCULADAS---\n");
 				} else {
 					printf("\nError... Primero ingrese el numero uno y dos\n");
@@ -85,6 +88,7 @@ int main (void){
 				break;
 			case 4:
 				if(flagCalculo != 0){
+					system("clear");
 
 					printf("\nLa suma de ambos numeros es: %.2f\n", suma);
 
