@@ -32,6 +32,9 @@ int main (void){
 					}
 					break;
 				case 2:
+					if(comprobarEspaciosOcupadosEstructura(listEmployee, MAX_EMPLOYEE)){
+
+					}
 					break;
 				case 3:
 					break;
