@@ -19,14 +19,13 @@
 int menu(void){
 
 	int optionMenu;
-	printf("\n-----OPCIONES-----\n");
+	printf("-----OPCIONES-----\n");
 	printf("1. Alta empleado\n");
 	printf("2. Modificar empleado\n");
 	printf("3. Baja empleado\n");
-	printf("4. Listar empleados ordenados alfabeticamente\n");
-	printf("5. Total, promedio y los que superan el promedio de salarios.\n");
-	printf("6. Salir\n");
-	optionMenu=pedirEnteroConRango("Ingrese una opcion: ", "Error...Ingrese una opcion valida", 1, 6);
+	printf("4. Informar.\n");
+	printf("5. Salir\n");
+	optionMenu=pedirEnteroConRango("Ingrese una opcion: ", "Error...Ingrese una opcion valida", 1, 5);
 
 	return optionMenu;
 }
@@ -80,68 +79,39 @@ float pedirFloat(char mensaje[]){
 
 }
 
-
-int get_String(char string[], char msg[], char errorMsg[], int retries, int lenght){
+int comprobarLenghtString(char string[], int len) {
 	int rtn;
-	char bufferString[lenght*4];
-
 	rtn = 0;
-
-	if(string != NULL && msg != NULL && errorMsg != NULL && retries >= 0 && lenght > 0){
-		do{
-			printf("%s", msg);
-			__fpurge(stdin);
-			scanf("%[^\n]", bufferString);
-			if(strlen(bufferString) > lenght-1){
-				printf("%s %d\n", errorMsg, lenght-1);
-				printf("Reintentos disponibles: %d\n\n", retries);
-				retries--;
-			} else {
-				if(strlwr(bufferString,lenght)) {
-					if(normalizarCadenaAlfabetica(bufferString,lenght)){
-						strcpy(string, bufferString);
-						rtn = 1;
-						break;
-					}
-				}
-			}
-
-		}while(retries >= 0);
+	if(strlen(string) > len-1){
+		printf("Error... El maximo de caracteres permitidos es:  %d\n", len-1);
+	} else {
+		rtn = 1;
 	}
 	return rtn;
 }
 
-int strlwr(char string[], int len){
+void strlwr(char string[], int len){
 	int i;
 
-	int rtn;
 
-	rtn = 0;
 	if(string != NULL && len >= 0){
 		for(i=0;i<len;i++){
 			if(string[i] == '\0'){
-				rtn = 1;
 				break;
 			} else {
 				string[i]=tolower(string[i]);
 			}
 		}
 	}
-	return rtn;
 }
 
-int normalizarCadenaAlfabetica(char string[], int len){
+void normalizarCadenaAlfabetica(char string[], int len){
 	int i;
-
-	int rtn;
-
-	rtn = 0;
 
 	if(string != NULL && len >= 0){
 		string[0]=toupper(string[0]);
 		for(i=0;i<len;i++){
 			if(string[i] == '\0'){
-				rtn = 1;
 				break;
 			} else {
 				if(isspace(string[i])){
@@ -150,6 +120,24 @@ int normalizarCadenaAlfabetica(char string[], int len){
 			}
 		}
 	}
+}
 
+int comprobarSoloAlfabetico(char string[], int len){
+	int i;
+	int rtn;
+	rtn = 0;
+
+	if(string != NULL && len >= 0){
+		for(i=0;i<len;i++){
+			if(string[i] == '\0'){
+				rtn = 1;
+				break;
+			} else {
+				if((string[i] > 'z' || string[i] < 'a') && (string[i] > 'Z' || string[i] < 'A')){
+					break;
+				}
+			}
+		}
+	}
 	return rtn;
 }

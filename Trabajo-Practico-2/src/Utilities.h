@@ -24,7 +24,8 @@ int pedirEnteroConRango(char mensaje[], char mensajeError[], int minimo, int max
 int pedirEntero(char mensaje[]);
 float pedirFloat(char mensaje[]);
 
-int get_String(char string[], char msg[], char errorMsg[], int retries, int lenght);
-int strlwr(char string[], int len);
-int normalizarCadenaAlfabetica(char string[], int len);
+int comprobarLenghtString(char string[], int len);
+void strlwr(char string[], int len);
+void normalizarCadenaAlfabetica(char string[], int len);
+int comprobarSoloAlfabetico(char string[], int len);
 #endif /* UTILITIES_H_ */

@@ -18,8 +18,8 @@
 
 typedef struct {
 	int id;
-	char name [STRING_LENGHT_EEMPLOYEE];
-	char lastName[STRING_LENGHT_EEMPLOYEE];
+	char name [STRING_LENGHT_EEMPLOYEE * 2];
+	char lastName[STRING_LENGHT_EEMPLOYEE * 2];
 	float salary;
 	int sector;
 	int isEmpty;
@@ -85,4 +85,80 @@ pointer received or employee not found]
 *
 */
 int findEmployeeById(Employee list[], int len,int id);
+
+/**
+ * @brief find an Employee by Id and charges it into modifyEmployee
+ *
+ * @param list Employee
+ * @param len int
+ * @return return 1 SUCCESS, or (0) if [Invalid length or NULL pointer received or employee not found]
+ */
+int askModifyEmployee(Employee list[], int len);
+
+/**
+ * @brief Modify employee data
+ *
+ * @param list Employee
+ * @param len int
+ * @param index int
+ * @return return 1 SUCCESS, or (0) if [Invalid length or NUL	pointer received or employee not found]
+ */
+int modifyEmployee(Employee list[], int len, int index);
+
+/**
+ * @brief find an Employee by Id and charges it into removeEmployee
+ *
+ * @param list Employee
+ * @param len int
+ * @return return 1 SUCCESS, or (0) if [Invalid length or NUL	pointer received or employee not found]
+ */
+int askRemoveEmployee(Employee list[], int len);
+
+/** \brief Remove a Employee by Id (put isEmpty Flag in 1)
+*
+* \param list Employee*
+* \param len int
+* \param id int
+* \return int Return (-1) if Error [Invalid length or NULL pointer or if can't
+find a employee] - (0) if Ok
+*
+*/
+int removeEmployee(Employee* list, int len, int id);
+
+
+/** \brief print the content of employees array
+*
+* \param list Employee*
+* \param length int
+* \return int
+*
+*/
+int printEmployees(Employee list[], int length);
+
+/**
+ * @brief print only one employee data
+ *
+ * @param oneEmployee receives the occupied index of Employee and print it
+ */
+void printOneEmployees(Employee oneEmployee);
+
+/** \brief Sort the elements in the array of employees, the argument order
+indicate UP or DOWN order
+*
+* \param list Employee*
+* \param len int
+* \param order int [1] indicate UP - [0] indicate DOWN
+* \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
+*
+*/
+int sortEmployees(Employee list[], int len, int order);
+
+/**
+ * @brief Deploy the submenu for point 4
+ *
+ * @param list Employee
+ * @param len int
+ */
+void subMenuInformar(Employee list[], int len);
+
 #endif /* EEMPLOYEE_H_ */

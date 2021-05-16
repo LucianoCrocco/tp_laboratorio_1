@@ -32,18 +32,32 @@ int main (void){
 					}
 					break;
 				case 2:
-					if(comprobarEspaciosOcupadosEstructura(listEmployee, MAX_EMPLOYEE)){
-
+					if(comprobarEspaciosOcupadosEstructura(listEmployee, MAX_EMPLOYEE) != 0){
+						if(askModifyEmployee(listEmployee, MAX_EMPLOYEE) == 0){
+							puts("\nEl empleado no pudo ser modificado\n");
+						}
+					} else {
+						puts("\nNo hay empleados cargados en el sistema!\n");
 					}
 					break;
 				case 3:
+					if(comprobarEspaciosOcupadosEstructura(listEmployee, MAX_EMPLOYEE) != 0){
+						if(askRemoveEmployee(listEmployee, MAX_EMPLOYEE) == 0){
+							puts("\nEmpleado borrado correctamente\n");
+						}
+					} else {
+						puts("\nNo hay empleados cargados en el sistema!\n");
+					}
 					break;
 				case 4:
-					break;
-				case 5:
+					if(comprobarEspaciosOcupadosEstructura(listEmployee, MAX_EMPLOYEE) != 0){
+						subMenuInformar(listEmployee, MAX_EMPLOYEE);
+					} else {
+						puts("\nNo hay empleados cargados en el sistema!\n");
+					}
 					break;
 			}
-		}while(option != 6);
+		}while(option != 5);
 	} else {
 		puts("\nError al iniciar la lista de Empleado\n");
 	}
