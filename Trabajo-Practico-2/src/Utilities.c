@@ -23,7 +23,7 @@ int menu(void){
 	printf("1. Alta empleado\n");
 	printf("2. Modificar empleado\n");
 	printf("3. Baja empleado\n");
-	printf("4. Informar.\n");
+	printf("4. Informar\n");
 	printf("5. Salir\n");
 	optionMenu=pedirEnteroConRango("Ingrese una opcion: ", "Error...Ingrese una opcion valida", 1, 5);
 
@@ -133,7 +133,7 @@ int comprobarSoloAlfabetico(char string[], int len){
 				rtn = 1;
 				break;
 			} else {
-				if((string[i] > 'z' || string[i] < 'a') && (string[i] > 'Z' || string[i] < 'A')){
+				if((string[i] > 'z' || string[i] < 'a') && (string[i] > 'Z' || string[i] < 'A') && !(isspace(string[i]))){
 					break;
 				}
 			}

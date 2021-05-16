@@ -48,7 +48,7 @@ int comprobarEspaciosOcupadosEstructura(Employee lista[], int lenghtArray);
  *
  * @param indexGenerado El index donde se cargar en el array.
  * @param numeroInicializador El numero con el cual inicalizamos esos ID
- * @return
+ * @return Retorna el ID generado
  */
 int generar_ID(int indexGenerado, int numeroInicializador);
 
@@ -161,4 +161,21 @@ int sortEmployees(Employee list[], int len, int order);
  */
 void subMenuInformar(Employee list[], int len);
 
+/**
+ * @brief print the average salary and calculates the employees that earns more money than the average employees
+ *
+ * @param list Employee
+ * @param len int
+ * @return return amount of employees that earns more money, if none does it 0. Return (-1) if Error [Invalid length or NULL pointer]
+ */
+int printAboveAverageSalary(Employee list[], int len);
+
+/**
+ * @brief calculate the average salary's in the array
+ *
+ * @param list Employee
+ * @param len int
+ * @return return float of the average salary
+ */
+float calculateAverageSalary(Employee list[], int len);
 #endif /* EEMPLOYEE_H_ */

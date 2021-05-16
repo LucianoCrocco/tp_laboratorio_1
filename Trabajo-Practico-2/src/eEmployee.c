@@ -156,6 +156,7 @@ int askModifyEmployee(Employee list[], int len){
 	rtn = 0;
 
 	if(list != NULL && len >= 0){
+		printEmployees(list, len);
 		datoABuscar = pedirEntero("\nIngrese el ID del empleado para modificar los datos: ");
 		index = findEmployeeById(list,len,datoABuscar);
 		while(index == -1 && reintentos < 3){
@@ -167,8 +168,10 @@ int askModifyEmployee(Employee list[], int len){
 		if(index != -1){
 			rtn = 1;
 			if(modifyEmployee(list, len, index) == 0){
+				system("cls");
 				puts("\nNo se modificaron los datos del trabajo\n");
 			} else {
+				system("cls");
 				puts("\nDatos modificados correctamente!\n");
 			}
 		}
@@ -237,14 +240,14 @@ int modifyEmployee(Employee list[], int len, int index){
 					}
 					break;
 				case 3:
-					floatAux=pedirFloat("Ingrese el nuevo salario del empleado: ");
-					printf("Nuevo salario cargado: %.2f, el viejo era: %.2f", floatAux, list[index].salary);
+					floatAux=pedirFloat("\nIngrese el nuevo salario del empleado: ");
+					printf("Nuevo salario cargado: %.2f, el viejo era: %.2f\n", floatAux, list[index].salary);
 					list[index].salary = floatAux;
 					flagCambio++;
 					break;
 				case 4:
-					intAux=pedirEntero("Ingrese el nuevo numero del sector al que pertenece el empleado: ");
-					printf("Nuevo sector cargado: %d, el viejo era: %.d", intAux, list[index].sector);
+					intAux=pedirEntero("\nIngrese el nuevo numero del Dector al que pertenece el empleado: ");
+					printf("Nuevo sector cargado: %d, el viejo era: %.d\n", intAux, list[index].sector);
 					list[index].sector = intAux;
 					flagCambio++;
 					break;
@@ -266,7 +269,8 @@ int askRemoveEmployee(Employee list[], int len){
 	rtn = 0;
 
 	if(list != NULL && len >= 0){
-		datoABuscar = pedirEntero("\nIngrese el ID del empleado para modificar los datos: ");
+		printEmployees(list, len);
+		datoABuscar = pedirEntero("\nIngrese el ID del empleado para borrar los datos: ");
 		index = findEmployeeById(list,len,datoABuscar);
 		while(index == -1 && reintentos < 3){
 			datoABuscar = pedirEntero("\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ");
@@ -301,6 +305,7 @@ int removeEmployee(Employee list[], int len, int id)
 void subMenuInformar(Employee list[], int len){
 	int option;
 	int order;
+	int aboveAverageSalaryEmployee;
 
 	if(list != NULL && len >= 0){
 		do {
@@ -319,6 +324,12 @@ void subMenuInformar(Employee list[], int len){
 					}
 					break;
 				case 2:
+					aboveAverageSalaryEmployee = printAboveAverageSalary(list, len);
+					if(aboveAverageSalaryEmployee != 0){
+						printf("\nLa cantidad de empleados que superan el promedio del salario es: %d", aboveAverageSalaryEmployee);
+					} else {
+						puts("\nNo hay empleados que superen el promedio de salario\n");
+					}
 					break;
 			}
 		}while (option != 3);
@@ -364,7 +375,7 @@ int sortEmployees(Employee list[], int len, int order)
 					aux = list[i];
 					j=i-1;
 					if(list[j].isEmpty == FALSE){
-						while((j>=0) && ((strcmp(aux.name, list[j].name) < 0) || ((strcmp(aux.name, list[j].name) == 0) && aux.sector < list[j].sector))){
+						while((j>=0) && ((strcmp(aux.lastName, list[j].lastName) < 0) || ((strcmp(aux.lastName, list[j].lastName) == 0) && aux.sector < list[j].sector))){
 							list[j+1] = list[j];
 							j--;
 						}
@@ -379,7 +390,7 @@ int sortEmployees(Employee list[], int len, int order)
 					aux = list[i];
 					j=i-1;
 					if(list[j].isEmpty == FALSE){
-						while((j>=0) && ((strcmp(aux.name, list[j].name) > 0) || ((strcmp(aux.name, list[j].name) == 0) && aux.sector > list[j].sector))){
+						while((j>=0) && ((strcmp(aux.lastName, list[j].lastName) > 0) || ((strcmp(aux.lastName, list[j].lastName) == 0) && aux.sector > list[j].sector))){
 							list[j+1] = list[j];
 							j--;
 						}
@@ -393,4 +404,44 @@ int sortEmployees(Employee list[], int len, int order)
 		rtn = -1;
 	}
 	return rtn;
+}
+
+int printAboveAverageSalary(Employee list[], int len){
+	int i;
+	float averageSalary;
+	int aboveAverage;
+
+	aboveAverage = 0;
+
+	if(list != NULL && len >= 0){
+		averageSalary = calculateAverageSalary(list,len);
+		printf("\nEl salario promedio es: %.2f", averageSalary);
+		for(i=0;i<len;i++){
+			if(list[i].isEmpty == FALSE && list[i].salary > averageSalary){
+				aboveAverage++;
+			}
+		}
+	} else {
+		return -1;
+	}
+	return aboveAverage;
+}
+
+float calculateAverageSalary(Employee list[], int len){
+	float accumulator;
+	int j;
+	int i;
+
+	accumulator = 0;
+	j = 0;
+
+	if(list != NULL && len >= 0){
+		for(i=0;i<len;i++){
+			if(list[i].isEmpty == FALSE){
+				accumulator += list[i].salary;
+				j++;
+			}
+		}
+	}
+	return accumulator / j;
 }
