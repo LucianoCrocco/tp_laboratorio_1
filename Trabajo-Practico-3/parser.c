@@ -12,34 +12,36 @@
  */
 int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 {
-	Employee* auxEmployee;
+	//Employee* auxEmployee = employee_new();//No es innecesario reservar memoria dinamica si voy a llamar a la funcion newParametros que asigna memoria dinamica?
 
-	char id[128];
+	Employee* auxEmployee = employee_new();
+
+	char id[15];
 	char nombre[128];
-	char horasTrabajadas[128];
-	char sueldo[128];
+	char horasTrabajadas[15];
+	char sueldo[25];
 
 	int flag = 0;
 
 	if(pFile != NULL){
 
-		while(!feof(pFile) && pArrayListEmployee != NULL){
+		while(!feof(pFile)){
 			if(flag == 0){
 				fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);
-				flag ++;
+				flag++;
+			} else {
+
+				fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);
+
+				auxEmployee=employee_newParametros(id, nombre, horasTrabajadas, sueldo);
+
+				ll_add(pArrayListEmployee, auxEmployee);
+
 			}
-
-			fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);
-
-			auxEmployee= employee_newParametros(id, nombre, horasTrabajadas, sueldo);
-
-			ll_add(pArrayListEmployee, auxEmployee);
 		}
 	} else {
 		return 0;
 	}
-
-	free(pFile);
 
     return 1;
 }
@@ -53,7 +55,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
  */
 int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 {
-	Employee* auxEmployee;
+	Employee* auxEmployee = employee_new();
 
 	if(pFile != NULL){
 
@@ -67,6 +69,6 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 		return 0;
 	}
 
-	free(pFile);
+
     return 1;
 }

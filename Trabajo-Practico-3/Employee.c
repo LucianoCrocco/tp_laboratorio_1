@@ -8,15 +8,7 @@ Employee* employee_new(){
 
 	Employee* newEmployee;
 
-	newEmployee = (Employee*) malloc (sizeof(Employee));
-
-	if(newEmployee != NULL){
-
-		employee_setId(newEmployee, 0);
-		employee_setNombre(newEmployee, " ");
-		employee_setHorasTrabajadas(newEmployee, 0);
-		employee_setSueldo(newEmployee, 0);
-	}
+	newEmployee = (Employee*) calloc (sizeof(Employee),1);
 
 	return newEmployee;
 }
@@ -81,6 +73,7 @@ int employee_getNombre(Employee* this,char* nombre){
 	}
 
 }
+
 
 int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas){
 

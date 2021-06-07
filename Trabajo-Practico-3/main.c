@@ -24,16 +24,20 @@ int main()
 {
 	setbuf(stdout,NULL);
 
-    int option = 0;
+    int option;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
 
     do{
+    	scanf("%d",&option);
         switch(option)
         {
             case 1:
                 controller_loadFromText("data.csv",listaEmpleados);
                 break;
+            case 2:
+            	controller_ListEmployee(listaEmpleados);
+            	break;
         }
     }while(option != 10);
 
