@@ -14,7 +14,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 {
 	//Employee* auxEmployee = employee_new();//No es innecesario reservar memoria dinamica si voy a llamar a la funcion newParametros que asigna memoria dinamica?
 
-	Employee* auxEmployee = employee_new();
+	Employee* auxEmployee;// = employee_new();
 
 	char id[15];
 	char nombre[128];
@@ -33,9 +33,14 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 
 				fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);
 
-				auxEmployee=employee_newParametros(id, nombre, horasTrabajadas, sueldo);
+				auxEmployee=employee_newParametros(id, nombre, horasTrabajadas, sueldo);//Validar que haya encontrado memoria.
 
-				ll_add(pArrayListEmployee, auxEmployee);
+				if(auxEmployee != NULL){
+					ll_add(pArrayListEmployee, auxEmployee);
+				} else {
+					return -1;
+				}
+
 
 			}
 		}

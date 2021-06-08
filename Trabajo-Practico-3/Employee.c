@@ -12,6 +12,7 @@ Employee* employee_new(){
 
 	return newEmployee;
 }
+
 Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajadasStr, char* sueldoStr){
 	Employee* newEmployee;
 
@@ -22,7 +23,7 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
 		employee_setId(newEmployee, atoi(idStr));
 		employee_setNombre(newEmployee, nombreStr);
 		employee_setHorasTrabajadas(newEmployee, atoi(horasTrabajadasStr));
-		employee_setSueldo(newEmployee, atoi(sueldoStr));
+		employee_setSueldo(newEmployee, atoi(sueldoStr));//Si alguno fallo hacer un delete employee y retornar NULL
 	}
 
 	return newEmployee;
@@ -36,16 +37,17 @@ void employee_delete(Employee* this){
 
 int employee_setId(Employee* this,int id){
 
-	if(this != NULL && id >= 0){
+	int rtn = 0;
+	if(this != NULL && id > -1){
 		this->id = id;
-		return 1;
-	} else {
-		return 0;
+		rtn =  1;
 	}
+
+	return rtn;
 }
 int employee_getId(Employee* this,int* id){
 
-	if(this != NULL && id >= 0){
+	if(this != NULL){
 		*id = this->id;
 		return 1;
 	} else {
