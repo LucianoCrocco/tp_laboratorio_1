@@ -63,6 +63,7 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
  * \return int
  *
  */
+/*
 int controller_addEmployee(LinkedList* pArrayListEmployee)
 {
 	if(pArrayListEmployee != NULL){
@@ -78,7 +79,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 		char confirmacion;
 
 		if(newEmployee != NULL){
-
+			//Refactorizar y hacerlo en el employee.h
 			id = controller_getIDEmployee(pArrayListEmployee);
 
 			if(id != 0 && retries != 0){
@@ -93,13 +94,10 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 
 				pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
 
-				employee_setId(newEmployee, id);//setall
-				employee_setNombre(newEmployee, nombre);
-				employee_setHorasTrabajadas(newEmployee, horasTrabajadas);
-				employee_setSueldo(newEmployee, sueldo);
+				employee_setAllAtributes(newEmployee, id, nombre, horasTrabajadas, sueldo);
 
 				printf("\t\t\tDATOS DEL NUEVO EMPLEADO");
-				controller_ListOneEmployee(newEmployee,0);
+				employee_ListOneEmployee(newEmployee,0);
 
 				if(get_YesNo(&confirmacion, "Ingrese 'S' si desea sumarlo al sistema, 'N' si desea descartar los datos ingresados: ", "Error... Ingrese 'S' o 'N' solamente", 5) == 0){
 					puts("\nError al conformer el nuevo empleado\n");
@@ -125,7 +123,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 		}
 	}
     return 1;
-}
+}*/
 
 /** \brief Modificar datos de empleado
  *
@@ -169,31 +167,9 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 			printf("\n\t\tLISTA DE EMPLEADOS\n");
 		}
 		auxEmployee= (Employee*) ll_get(pArrayListEmployee, i);
-		controller_ListOneEmployee(auxEmployee, i);
+		employee_ListOneEmployee(auxEmployee, i);
 	}
     return 1;
-}
-
-void controller_ListOneEmployee(Employee* pEmployee, int primeraIteracion){//Biblio empleados
-
-	int id;
-	char nombre[STRING_LENGHT];
-	int horasTrabajadas;
-	int sueldo;
-
-	employee_getId(pEmployee, &id);
-	employee_getNombre(pEmployee, nombre);
-	employee_getHorasTrabajadas(pEmployee, &horasTrabajadas);
-	employee_getSueldo(pEmployee, &sueldo);
-
-	if(pEmployee != NULL){
-		if(primeraIteracion == 0){
-			printf("\n[ID]\t\t[NOMBRE]\t[HORAS TRABAJADAS]\t[SALARIO]\n\n");
-			printf("%04d%18s\t\t      %03dhrs\t\t %05d$\n", id, nombre, horasTrabajadas, sueldo);
-		} else {
-			printf("%04d%18s\t\t      %03dhrs\t\t %05d$\n", id, nombre, horasTrabajadas, sueldo);
-		}
-	}
 }
 /** \brief Ordenar empleados
  *
@@ -289,27 +265,61 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
     return 1;
 }
 
+int controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
 
-int controller_getIDEmployee(LinkedList* pArrayListEmployee){
+}
+/*
+int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
+	int rtn = 0;
 
-	int idLibre;
-	int ultimoID;
-	int len;
-
-	len = ll_len(pArrayListEmployee);
 	Employee* auxEmployee = employee_new();
+	int len = ll_len(pArrayListEmployee);
+	int lastIDSaved;
+	int lastEmployeeID;
 
-	if(auxEmployee != NULL){
-		auxEmployee = (Employee*) ll_get(pArrayListEmployee, len-1);
-		employee_getId(auxEmployee,&ultimoID);
-		idLibre = ultimoID+1;
-	} else {
-		return 0;
+	auxEmployee=ll_get(pArrayListEmployee,len);
+	employee_getId(auxEmployee,&lastEmployeeID);
+
+
+
+	if(path != NULL && pArrayListEmployee != NULL){
+
+
+		FILE* pFile;
+		pFile = fopen(path,"rb");
+
+		fread(&lastIDSaved,sizeof(int),1,pFile);
+
+		if(lastIDSaved < lastEmployeeID){
+			controller_saveLastIDEmployee(path, lastIDSaved);
+		}
+
+		fclose(pFile);
+		rtn = 1;
 	}
 
-	return idLibre;
 
+	return rtn;
 }
 
 
 
+
+int controller_saveLastIDEmployee(char* path, int newLastID){//Employee.h
+	int rtn = 0;
+
+
+	if(path !=NULL){
+		FILE* pFile;
+
+		pFile = fopen(path,"wb");
+		fwrite(&newLastID,sizeof(int),1,pFile);
+		fclose(pFile);
+		rtn = 1;
+	}
+
+	return rtn;
+}
+
+
+*/

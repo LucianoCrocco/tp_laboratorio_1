@@ -19,11 +19,8 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
 	newEmployee = employee_new();
 
 	if(newEmployee != NULL){
-
-		employee_setId(newEmployee, atoi(idStr));
-		employee_setNombre(newEmployee, nombreStr);
-		employee_setHorasTrabajadas(newEmployee, atoi(horasTrabajadasStr));
-		employee_setSueldo(newEmployee, atoi(sueldoStr));//Si alguno fallo hacer un delete employee y retornar NULL
+		//Verificar retornos, etc.
+		employee_setAllAtributes(newEmployee,atoi(idStr), nombreStr, atoi(horasTrabajadasStr), atoi(sueldoStr));
 	}
 
 	return newEmployee;
@@ -38,6 +35,7 @@ void employee_delete(Employee* this){
 int employee_setId(Employee* this,int id){
 
 	int rtn = 0;
+
 	if(this != NULL && id > -1){
 		this->id = id;
 		rtn =  1;
@@ -47,72 +45,186 @@ int employee_setId(Employee* this,int id){
 }
 int employee_getId(Employee* this,int* id){
 
+	int rtn = 0;
+
 	if(this != NULL){
 		*id = this->id;
-		return 1;
-	} else {
-		return 0;
+		rtn = 1;
 	}
+
+	return rtn;
 }
 
 int employee_setNombre(Employee* this,char* nombre){
 
+	int rtn = 0;
+
 	if(this != NULL && nombre != NULL){
 		strcpy(this->nombre, nombre);
-		return 1;
-	} else {
-		return 0;
+		rtn =  1;
 	}
 
+	return rtn;
 }
 int employee_getNombre(Employee* this,char* nombre){
 
+	int rtn = 0;
+
 	if(this != NULL && nombre != NULL){
 		strcpy(nombre, this->nombre);
-		return 1;
-	} else {
-		return 0;
+		rtn = 1;
 	}
+
+	return rtn;
 
 }
 
 
 int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas){
 
-	if(this != NULL && horasTrabajadas >= 0){
+	int rtn = 0;
+
+	if(this != NULL && horasTrabajadas > -1){
 		this->horasTrabajadas = horasTrabajadas;
-		return 1;
-	} else {
-		return 0;
+		rtn =  1;
 	}
+
+	return rtn;
 
 }
 int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas){
 
-	if(this != NULL && horasTrabajadas >= 0){
+	int rtn = 0;
+
+	if(this != NULL){
 		*horasTrabajadas = this->horasTrabajadas;
-		return 1;
-	} else {
-		return 0;
+		rtn = 1;
 	}
+
+	return rtn;
 }
 
 int employee_setSueldo(Employee* this,int sueldo){
 
-	if(this != NULL && sueldo >= 0){
+	int rtn;
+
+	if(this != NULL && sueldo > -1){
 		this->sueldo = sueldo;
-		return 1;
-	} else {
-		return 0;
+		rtn = 1;
 	}
+
+	return rtn;
 
 }
 int employee_getSueldo(Employee* this,int* sueldo){
 
-	if(this != NULL && sueldo >= 0){
+	int rtn = 0;
+
+	if(this != NULL){
 		*sueldo = this->sueldo;
-		return 1;
+		rtn = 1;
+	}
+
+	return rtn;
+
+}
+
+
+int employee_setAllAtributes(Employee* this, int id, char* nombre, int horasTrabajadas, int sueldo){
+	int rtn = 1;
+
+	if(this != NULL && id > -1 && nombre != NULL && horasTrabajadas > -1 && sueldo > -1){
+
+		if(employee_setId(this, id) == 0 && rtn == 1){
+			rtn = 0;
+		}
+		if(employee_setNombre(this, nombre) == 0 && rtn == 1){
+			rtn = 0;
+		}
+		if(employee_setHorasTrabajadas(this, horasTrabajadas) == 0 && rtn == 1){
+			rtn = 0;
+		}
+
+		if(employee_setSueldo(this, sueldo) == 0 && rtn == 1){
+			rtn = 0;
+		}
+
 	} else {
-		return 0;
+
+		rtn = 0;
+
+	}
+
+	return rtn;
+}
+
+int employee_getAllAtributes(Employee* this, int* id, char* nombre, int* horasTrabajadas, int* sueldo){
+
+	int rtn = 1;
+
+	if(this != NULL && id != NULL && nombre != NULL && horasTrabajadas != NULL && sueldo != NULL){
+
+		if(employee_getId(this, id) == 0 && rtn == 1){
+			rtn = 0;
+		}
+		if(employee_getNombre(this, nombre) == 0 && rtn == 1){
+			rtn = 0;
+		}
+		if(employee_getHorasTrabajadas(this, horasTrabajadas) == 0 && rtn == 1){
+			rtn = 0;
+		}
+
+		if(employee_getSueldo(this, sueldo) == 0 && rtn == 1){
+			rtn = 0;
+		}
+
+	} else {
+
+		rtn = 0;
+
+	}
+
+	return rtn;
+
+}
+
+
+void employee_ListOneEmployee(Employee* this, int primeraIteracion){
+
+	int id;
+	char nombre[STRING_LENGHT];
+	int horasTrabajadas;
+	int sueldo;
+
+	employee_getAllAtributes(this, &id, nombre, &horasTrabajadas, &sueldo);
+
+	if(this != NULL){
+		if(primeraIteracion == 0){
+			printf("\n[ID]\t\t[NOMBRE]\t[HORAS TRABAJADAS]\t[SALARIO]\n\n");
+			printf("%04d%18s\t\t      %03dhrs\t\t %05d$\n", id, nombre, horasTrabajadas, sueldo);
+		} else {
+			printf("%04d%18s\t\t      %03dhrs\t\t %05d$\n", id, nombre, horasTrabajadas, sueldo);
+		}
 	}
 }
+
+/*
+int employee_AddOneEmployee(Employee* this){
+	int rtn
+}
+	id = controller_getIDEmployee(pArrayListEmployee);
+
+	if(id != 0 && retries != 0){
+		printf("\n\tID ASIGNADO AUTOMATICAMENTE: %d\n", id);
+
+		if(get_Name(nombre, retries, STRING_LENGHT) == 0){
+			puts("\nError al cargar el nombre del nuevo empleado\n");
+			return 0;
+		}
+
+		pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
+
+		pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
+
+		employee_setAllAtributes(newEmployee, id, nombre, horasTrabajadas, sueldo);
+}*/

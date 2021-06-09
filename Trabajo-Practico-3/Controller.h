@@ -15,7 +15,8 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee);
 
 //PROPIAS
 
-void controller_ListOneEmployee(Employee* pEmployee, int primeraIteracion);
+int controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee);
 
-int controller_getIDEmployee(LinkedList* pArrayListEmployee);
-
+//int controller_loadIDEmployee(char* path, LinkedList* pArrayListEmployee);
+//int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
+//int controller_saveLastIDEmployee(char* path, int newLastID);

@@ -27,7 +27,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 
 		while(!feof(pFile)){
 			if(flag == 0){
-				fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);
+				fscanf(pFile,"%[^,],%[^,],%[^,],%[^\n]\n", id, nombre, horasTrabajadas, sueldo);//En vez de hacer esto podria verificar que me devuelva un employee y si no es valido saltearlo
 				flag++;
 			} else {
 
@@ -38,7 +38,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 				if(auxEmployee != NULL){
 					ll_add(pArrayListEmployee, auxEmployee);
 				} else {
-					return -1;
+					return 0;
 				}
 
 
@@ -66,14 +66,16 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 
 		while(!feof(pFile) && pArrayListEmployee != NULL){
 
-			fread(auxEmployee,sizeof(Employee),1,pFile);
-			ll_add(pArrayListEmployee, auxEmployee);
-
+			if(auxEmployee != NULL){
+				fread(auxEmployee,sizeof(Employee),1,pFile);
+				ll_add(pArrayListEmployee, auxEmployee);
+			} else {
+				return 0;
+			}
 		}
 	} else {
 		return 0;
 	}
-
 
     return 1;
 }

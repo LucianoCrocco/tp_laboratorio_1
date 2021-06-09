@@ -18,7 +18,7 @@
     10. Salir
 *****************************************************/
 
-
+//HACER .DAT O CSV PARA GUARDAR LOS ELIMINADOS Y OTRO PARA EL ULTIMO ID LA PRIMERA VEZ QUE INGRESE
 
 int main()
 {
@@ -26,6 +26,10 @@ int main()
 
     int option;
     int len;
+    int flagCargoTexto = 0;
+    int flagCargoBinario = 0;
+    int flagGuardoTexto = 0;
+    int flagGuardoBinario = 0;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
 
@@ -38,32 +42,38 @@ int main()
 
 
     	len = ll_len(listaEmpleados);//isEmpty
-    	//printf("%d",len);
 
         switch(option)
         {
             case 1:
-            	if(len > 0){
-            		printf("\nYa se cargaron los datos en la memoria, desea volver a cargarlos?");
+            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
+            		puts("\nYa se cargaron datos en la memoria, desea volver a cargarlos? (Esto puede descartar las modificaciones hechas previamente si no se guardo su contenido)\n");
             		//Funciones - subMenu
             	} else {
-					controller_loadFromText("data.csv",listaEmpleados);
-					//Validaciones
+					if(controller_loadFromText("data.csv",listaEmpleados) == 0) {
+						puts("\nError al cargar el archivo en modo texto\n");
+					} else {
+						flagCargoTexto++;
+
+					}
             	}
                 break;
             case 2:
-            	if(len > 0){
-            		printf("\nYa se cargaron los datos en la memoria, desea volver a cargarlos?");
-            		//Funciones
+            	if(flagCargoTexto != 0 && flagCargoBinario != 0){
+            		puts("\nYa se cargaron datos en la memoria, desea volver a cargarlos? (Esto puede descartar las modificaciones hechas previamente si no se guardo su contenido)\n");
+            		//Funciones - subMenu
             	} else {
-            		controller_loadFromBinary("dataBinary.dat",listaEmpleados);
-            		//Validaciones
+            		if(controller_loadFromBinary("dataBinary.dat",listaEmpleados)== 0){
+            			puts("\nError al cargar el archivo en modo binario\n");
+            		} else {
+            			flagCargoBinario++;
+            		}
             	}
             	break;
             case 3:
-            	if(len > 0){
+            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
             		system("clear");
-					controller_addEmployee(listaEmpleados);
+					//controller_addEmployee(listaEmpleados);
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
@@ -71,7 +81,7 @@ int main()
             	}
             	break;
             case 4:
-            	if(len > 0){
+            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
 					//controller_addEmployee(listaEmpleados);
             	} else {
             		system("clear");
@@ -80,7 +90,7 @@ int main()
             	}
             	break;
             case 5:
-            	if(len > 0){
+            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
 					//controller_addEmployee(listaEmpleados);
             	} else {
             		system("clear");
@@ -126,6 +136,7 @@ int main()
             	break;
             default:
             	///HACER UN CASE MAS, Y HACER VALIDACIONES DE QUE SI HUBO MODIFICACIONES SE LE AVISE AL USUARIO.
+            	//controller_loadIDEmployee("ultimoID.dat", listaEmpleados);
             	puts("\nSaliendo del programa");
             	ll_deleteLinkedList(listaEmpleados);
             	break;
