@@ -32,6 +32,10 @@ int main()
     int flagGuardoBinario = 0;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
+    int id;
+
+    id = controller_assignLastID("lastID.dat");
+    printf("-------------------%d--------------------\n\n\n",id);
 
     do{
 
@@ -73,7 +77,7 @@ int main()
             case 3:
             	if(flagCargoTexto != 0 || flagCargoBinario != 0){
             		system("clear");
-					//controller_addEmployee(listaEmpleados);
+					controller_addEmployee(listaEmpleados);
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
@@ -134,14 +138,15 @@ int main()
             		system("pause");
             	}
             	break;
-            default:
+            case 10:
+            	//controller_generateIDEmployee("lastID.dat", listaEmpleados);
             	///HACER UN CASE MAS, Y HACER VALIDACIONES DE QUE SI HUBO MODIFICACIONES SE LE AVISE AL USUARIO.
             	//controller_loadIDEmployee("ultimoID.dat", listaEmpleados);
             	puts("\nSaliendo del programa");
-            	ll_deleteLinkedList(listaEmpleados);
+            	//ll_deleteLinkedList(listaEmpleados);
             	break;
         }
-    }while(option != 10);
+    }while(option != 11);
 
     return EXIT_SUCCESS;
 }

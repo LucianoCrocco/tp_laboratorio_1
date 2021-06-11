@@ -79,3 +79,21 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 
     return 1;
 }
+
+
+
+//PROPIAS
+int parser_IDFromBinary(FILE* pFile){
+
+	int id = 0;
+
+	if(pFile !=NULL){
+		while(!feof(pFile)){
+			fread(&id,sizeof(int),1,pFile);
+		}
+	} else {
+		return 0;
+	}
+
+	return id;
+}

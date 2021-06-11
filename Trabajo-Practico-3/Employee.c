@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Controller.h"
 #include "LinkedList.h"
 #include "Employee.h"
+#include "bibliotecaGen.h"
 
 Employee* employee_new(){
 
@@ -143,7 +145,7 @@ int employee_setAllAtributes(Employee* this, int id, char* nombre, int horasTrab
 		}
 		if(employee_setHorasTrabajadas(this, horasTrabajadas) == 0 && rtn == 1){
 			rtn = 0;
-		}
+		}//int
 
 		if(employee_setSueldo(this, sueldo) == 0 && rtn == 1){
 			rtn = 0;
@@ -208,23 +210,37 @@ void employee_ListOneEmployee(Employee* this, int primeraIteracion){
 	}
 }
 
-/*
-int employee_AddOneEmployee(Employee* this){
-	int rtn
-}
-	id = controller_getIDEmployee(pArrayListEmployee);
 
-	if(id != 0 && retries != 0){
-		printf("\n\tID ASIGNADO AUTOMATICAMENTE: %d\n", id);
+int employee_AddOneEmployee(Employee* this, int retries){
+	int rtn = 0;
 
-		if(get_Name(nombre, retries, STRING_LENGHT) == 0){
-			puts("\nError al cargar el nombre del nuevo empleado\n");
-			return 0;
+	int id;
+	char nombre[STRING_LENGHT];
+	int horasTrabajadas;
+	int sueldo;
+
+	if (this != NULL && retries > 0){
+		id = controller_assignLastID("lastID.dat");
+
+		if(id != 0){
+			printf("\n\tID ASIGNADO AUTOMATICAMENTE: %d\n", id+1);
+
+			if(get_Name(nombre, retries, STRING_LENGHT) == 0){
+				puts("\nError al cargar el nombre del nuevo empleado\n");
+				return 0;
+			}
+
+			//get_Name(nombre, 5, 128);
+
+			pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
+
+			pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
+
+			employee_setAllAtributes(this, id+1, nombre, horasTrabajadas, sueldo);
+
+			rtn = 1;
 		}
+	}
 
-		pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
-
-		pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
-
-		employee_setAllAtributes(newEmployee, id, nombre, horasTrabajadas, sueldo);
-}*/
+	return rtn;
+}

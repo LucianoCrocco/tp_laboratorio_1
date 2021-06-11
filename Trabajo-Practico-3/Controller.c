@@ -63,67 +63,46 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
  * \return int
  *
  */
-/*
 int controller_addEmployee(LinkedList* pArrayListEmployee)
 {
 	if(pArrayListEmployee != NULL){
 
-		int id;
-		char nombre[STRING_LENGHT];
-		int horasTrabajadas;
-		int sueldo;
 		Employee* newEmployee = employee_new();
 
 		int retries = 5;
-		//int validacion;
 		char confirmacion;
 
 		if(newEmployee != NULL){
-			//Refactorizar y hacerlo en el employee.h
-			id = controller_getIDEmployee(pArrayListEmployee);
 
-			if(id != 0 && retries != 0){
-				printf("\n\tID ASIGNADO AUTOMATICAMENTE: %d\n", id);
+			employee_AddOneEmployee(newEmployee, retries);
 
-				if(get_Name(nombre, retries, STRING_LENGHT) == 0){
-					puts("\nError al cargar el nombre del nuevo empleado\n");
-					return 0;
-				}
+			employee_ListOneEmployee(newEmployee,0);
 
-				pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
-
-				pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
-
-				employee_setAllAtributes(newEmployee, id, nombre, horasTrabajadas, sueldo);
-
-				printf("\t\t\tDATOS DEL NUEVO EMPLEADO");
-				employee_ListOneEmployee(newEmployee,0);
-
-				if(get_YesNo(&confirmacion, "Ingrese 'S' si desea sumarlo al sistema, 'N' si desea descartar los datos ingresados: ", "Error... Ingrese 'S' o 'N' solamente", 5) == 0){
-					puts("\nError al conformer el nuevo empleado\n");
-					return 0;
-				}  else {
-					if(confirmacion == 'N'){
-						employee_delete(newEmployee);
-						puts("\nNo se agrego al sistema el nuevo empleado\n");
-						return 1;
-					} else{
-						ll_add(pArrayListEmployee,newEmployee);
-						puts("\nSe agrego al sistema el nuevo empleado\n");
-						return 1;
-					}
-				}
-
-			} else {
+			if(get_YesNo(&confirmacion, "Ingrese 'S' si desea sumarlo al sistema, 'N' si desea descartar los datos ingresados: ", "Error... Ingrese 'S' o 'N' solamente", 5) == 0){
+				puts("\nError al confirmar el nuevo empleado\n");
 				return 0;
+			}  else {
+				if(confirmacion == 'N'){
+					employee_delete(newEmployee);
+					puts("\nNo se agrego al sistema el nuevo empleado\n");
+					return 1;
+				} else{
+					ll_add(pArrayListEmployee,newEmployee);
+					puts("\nSe agrego al sistema el nuevo empleado\n");
+					return 1;
+				}
 			}
 
 		} else {
 			return 0;
 		}
+
+	} else {
+		return 0;
 	}
     return 1;
-}*/
+}
+
 
 /** \brief Modificar datos de empleado
  *
@@ -265,9 +244,43 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
     return 1;
 }
 
-int controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
 
+
+/*
+void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
+	FILE* pFile;
+
+	pFile=fopen(path, "wb");
+
+	Employee* auxEmployee = employee_new();
+
+	int id;
+	int index = ll_len(pArrayListEmployee);
+	auxEmployee = (Employee*) ll_get (pArrayListEmployee,index-1);
+
+	employee_ListOneEmployee(auxEmployee,0);
+
+	employee_getId(auxEmployee,&id);
+
+	fwrite(&id,sizeof(int), 1, pFile);
+
+	fclose(pFile);
+
+}*/
+
+int controller_assignLastID(char* path){
+	FILE* pFile;
+	int rtn = 0;
+
+	pFile=fopen(path,"rb");
+
+	if(pFile != NULL){
+		rtn = parser_IDFromBinary(pFile);
+	}
+
+	return rtn;
 }
+
 /*
 int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
 	int rtn = 0;

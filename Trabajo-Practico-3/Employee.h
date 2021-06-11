@@ -35,5 +35,5 @@ int employee_getAllAtributes(Employee* this, int* id, char* nombre, int* horasTr
 
 void employee_ListOneEmployee(Employee* this, int primeraIteracion);
 
-//int employee_AddOneEmployee(Employee* this);
+int employee_AddOneEmployee(Employee* this, int retries);
 #endif // employee_H_INCLUDED

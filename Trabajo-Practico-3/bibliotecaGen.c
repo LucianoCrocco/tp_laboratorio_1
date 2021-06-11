@@ -164,7 +164,7 @@ int get_Char (char* pResult, char* msg, char* errorMsg, char min, char max, int 
 
 int get_String(char* pResult, char* msg, char* errorMsg, int retries, int lenght){
 	int rtn;
-	char bufferString[400];
+	char bufferString[STRING_LENGHT_BUFFER];
 
 	rtn = 0;
 
@@ -188,9 +188,10 @@ int get_String(char* pResult, char* msg, char* errorMsg, int retries, int lenght
 	return rtn;
 }
 
+
 int get_Name(char* pResult, int retries, int lenght){
-	char buffer[400];
-	int validacion;
+	char buffer[STRING_LENGHT_BUFFER];
+	int validacion = 0;
 
 	if(lenght > 0 && retries >= 0){
 		while(retries >= 0 && validacion == 0){

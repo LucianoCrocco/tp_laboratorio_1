@@ -13,7 +13,7 @@
 #include <limits.h>
 #include <string.h>
 
-//#define STRING_LENGHT 128
+#define STRING_LENGHT_BUFFER 500
 
 /************************************************************************************************************/
 /***************************************************VIEJAS***************************************************/
@@ -30,7 +30,7 @@ int pedirEnteroConRango(int* pResultado, char* mensaje, char* mensajeError, int 
 /***************************************************NUEVAS***************************************************/
 /************************************************************************************************************/
 
-int get_Char (char* pResult, char* msg, char* errorMsg, char min, char max, int retries);
+int get_Char(char* pResult, char* msg, char* errorMsg, char min, char max, int retries);
 
 int get_String(char* pResult, char* msg, char* errorMsg, int retries, int lenght);
 

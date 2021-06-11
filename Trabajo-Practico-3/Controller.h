@@ -1,4 +1,4 @@
-
+#include "LinkedList.h"
 #include "Employee.h"
 
 #define STRING_LENGHT 128
@@ -14,9 +14,18 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee);
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee);
 
 //PROPIAS
+int controller_assignLastID(char* path);
 
-int controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee);
 
-//int controller_loadIDEmployee(char* path, LinkedList* pArrayListEmployee);
-//int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
-//int controller_saveLastIDEmployee(char* path, int newLastID);
+//AUXILIARES
+//void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee);
+
+
+
+
+/*
+void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee);
+
+int controller_assignLastID(char* path);
+int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
+int controller_saveLastIDEmployee(char* path, int newLastID);*/
