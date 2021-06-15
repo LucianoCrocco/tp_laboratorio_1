@@ -75,14 +75,16 @@ int main()
             	}
             	break;
             case 3:
+            	controller_addEmployee(listaEmpleados);
+            	/*
             	if(flagCargoTexto != 0 || flagCargoBinario != 0){
             		system("clear");
-					controller_addEmployee(listaEmpleados);
+
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
             		system("pause");
-            	}
+            	}*/
             	break;
             case 4:
             	if(flagCargoTexto != 0 || flagCargoBinario != 0){
@@ -95,7 +97,7 @@ int main()
             	break;
             case 5:
             	if(flagCargoTexto != 0 || flagCargoBinario != 0){
-					//controller_addEmployee(listaEmpleados);
+					controller_removeEmployee(listaEmpleados);
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
@@ -141,9 +143,9 @@ int main()
             case 10:
             	//controller_generateIDEmployee("lastID.dat", listaEmpleados);
             	///HACER UN CASE MAS, Y HACER VALIDACIONES DE QUE SI HUBO MODIFICACIONES SE LE AVISE AL USUARIO.
-            	//controller_loadIDEmployee("ultimoID.dat", listaEmpleados);
+            	controller_loadLastIDEmployee("lastID.dat", listaEmpleados);
             	puts("\nSaliendo del programa");
-            	//ll_deleteLinkedList(listaEmpleados);
+            	ll_deleteLinkedList(listaEmpleados);
             	break;
         }
     }while(option != 11);

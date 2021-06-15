@@ -230,8 +230,6 @@ int employee_AddOneEmployee(Employee* this, int retries){
 				return 0;
 			}
 
-			//get_Name(nombre, 5, 128);
-
 			pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
 
 			pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
@@ -244,3 +242,4 @@ int employee_AddOneEmployee(Employee* this, int retries){
 
 	return rtn;
 }
+

@@ -55,8 +55,29 @@ int ll_len(LinkedList* this)
  */
 static Node* getNode(LinkedList* this, int nodeIndex)
 {
-    return NULL;
+	int i;
+	Node* pNode = NULL;// = (Node*) malloc (sizeof(Node)); -> No hace falta pq tengo que apuntar a un nodo que ya esta en memoria dinamica
+	int len = ll_len(this); //Para verificar que no ingrese un nodo fuera del lenght de la linkedlist
+
+
+	if(this != NULL && nodeIndex > -1 && nodeIndex < len){
+
+		for(i=0;i<=nodeIndex;i++){ // <= Para que pueda ingresar al primer elemento
+
+			if(i==0){
+				pNode = this->pFirstNode;
+			} else {
+				pNode = pNode->pNextNode;
+			}
+
+		}
+
+	}
+
+    return pNode;
 }
+
+
 
 /** \brief  Permite realizar el test de la funcion getNode la cual es privada
  *
@@ -68,6 +89,7 @@ static Node* getNode(LinkedList* this, int nodeIndex)
  */
 Node* test_getNode(LinkedList* this, int nodeIndex)
 {
+
     return getNode(this, nodeIndex);
 }
 
@@ -84,8 +106,36 @@ Node* test_getNode(LinkedList* this, int nodeIndex)
 static int addNode(LinkedList* this, int nodeIndex,void* pElement)
 {
     int returnAux = -1;
+
+    int len = ll_len(this);
+    Node* pNode = (Node*) malloc (sizeof(Node));
+    Node* pNewNode = (Node*) malloc (sizeof(Node));
+
+    if(this != NULL && /*nodeIndex > -1 && */pElement != NULL && nodeIndex >=len){// Por que error: [Intenta agregar un nodo el la posicion cero de una lista con elementos cargados]
+    	if(this->pFirstNode == NULL){
+
+    		this->pFirstNode = pNode;
+    		pNode->pNextNode = NULL;
+    		pNode->pElement = pElement;
+    		this->size++;
+    		returnAux = 0;
+
+    	} else {
+			pNode = getNode(this, len-1);
+			pNode->pNextNode = pNewNode;
+			pNewNode->pElement = pElement;
+			pNewNode->pNextNode = NULL;
+			this->size++;
+			returnAux = 0;
+
+			}
+
+    	}
+
     return returnAux;
 }
+
+
 
 /** \brief Permite realizar el test de la funcion addNode la cual es privada
  *
@@ -112,6 +162,17 @@ int test_addNode(LinkedList* this, int nodeIndex,void* pElement)
 int ll_add(LinkedList* this, void* pElement)
 {
     int returnAux = -1;
+    int len = ll_len(this);;
+    int validar;
+
+    if(this != NULL){
+		validar = addNode(this, len, pElement);
+
+		if(validar == 0){
+			returnAux = 0;
+		}
+    }
+
 
     return returnAux;
 }
@@ -127,6 +188,17 @@ int ll_add(LinkedList* this, void* pElement)
 void* ll_get(LinkedList* this, int index)
 {
     void* returnAux = NULL;
+    Node* pNode;
+    int len = ll_len(this);
+
+    if(this != NULL && index < len){
+		pNode = getNode(this, index);
+
+		if(pNode != NULL){
+			returnAux = pNode;
+		}
+    }
+
 
     return returnAux;
 }

@@ -125,7 +125,67 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
+	int id;
+	int retries = 3;
+	int index;
+	char confirmacion;
+
+	Employee* deleteEmployee = employee_new();
+
+	if(pArrayListEmployee != NULL && deleteEmployee != NULL){
+
+		pedirEntero("Ingrese el ID del empleado que desea elminar: ", &id);
+		index = controller_findEmployeeByID(pArrayListEmployee, id);
+
+		while(index == -1 && retries != 0){
+			retries--;
+			printf("\nError al encontrar el empleado, el ID ingresado es inexistente\n");
+			pedirEntero("Ingrese el ID del empleado que desea elminar: ", &id);
+			index = controller_findEmployeeByID(pArrayListEmployee, id);
+		}
+
+		if(index != -1){
+			if(get_YesNo(&confirmacion, "Ingrese 'S' si desea sumarlo al sistema, 'N' si desea descartar los datos ingresados: ", "Error... Ingrese 'S' o 'N' solamente", retries) == 0){
+				puts("\nError al confirmar la eliminacion del empleado\n");
+				return 0;
+			} else {
+				if(confirmacion == 'S'){
+					deleteEmployee = (Employee*) ll_get(pArrayListEmployee, index);
+					//Agregarlo a un dataDeleted.csv
+					ll_remove(pArrayListEmployee, index);
+					employee_delete(deleteEmployee);
+				} else {
+					puts("\nNo se elimino al empleado");
+				}
+			}
+		}
+
+	} else {
+		return 0;
+	}
+
     return 1;
+}
+
+int controller_findEmployeeByID(LinkedList* pArrayListEmployee, int id){
+	int i;
+	int rtn;
+	int len;
+
+	len = ll_len(pArrayListEmployee);
+	rtn = -1;
+	Employee* findEmployee = employee_new();
+
+	if(pArrayListEmployee != NULL){
+		for(i=0;i<len;i++){
+			findEmployee = (Employee*) ll_get (pArrayListEmployee,i);
+			if(findEmployee->id == id){
+				rtn = i;
+				break;
+			}
+		}
+	}
+	return rtn;
 }
 
 /** \brief Listar empleados
@@ -193,10 +253,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 		for(i=0;i<len;i++){//Para que no escriba los header del csv
 			auxEmployee=ll_get(pArrayListEmployee, i);
 
-			employee_getId(auxEmployee, &id);
-			employee_getNombre(auxEmployee, nombre);
-			employee_getHorasTrabajadas(auxEmployee, &horasTrabajadas);
-			employee_getSueldo(auxEmployee, &sueldo);
+			employee_getAllAtributes(auxEmployee, &id, nombre, &horasTrabajadas, &sueldo);
 
 			fprintf(pFile,"%d,%s,%d,%d\n", id, nombre, horasTrabajadas, sueldo);
 		}
@@ -245,29 +302,6 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 }
 
 
-
-/*
-void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
-	FILE* pFile;
-
-	pFile=fopen(path, "wb");
-
-	Employee* auxEmployee = employee_new();
-
-	int id;
-	int index = ll_len(pArrayListEmployee);
-	auxEmployee = (Employee*) ll_get (pArrayListEmployee,index-1);
-
-	employee_ListOneEmployee(auxEmployee,0);
-
-	employee_getId(auxEmployee,&id);
-
-	fwrite(&id,sizeof(int), 1, pFile);
-
-	fclose(pFile);
-
-}*/
-
 int controller_assignLastID(char* path){
 	FILE* pFile;
 	int rtn = 0;
@@ -281,22 +315,20 @@ int controller_assignLastID(char* path){
 	return rtn;
 }
 
-/*
+
 int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
 	int rtn = 0;
 
 	Employee* auxEmployee = employee_new();
-	int len = ll_len(pArrayListEmployee);
+
 	int lastIDSaved;
 	int lastEmployeeID;
 
-	auxEmployee=ll_get(pArrayListEmployee,len);
-	employee_getId(auxEmployee,&lastEmployeeID);
-
-
-
 	if(path != NULL && pArrayListEmployee != NULL){
 
+		int len = ll_len(pArrayListEmployee);
+		auxEmployee = ll_get(pArrayListEmployee,len-1);
+		employee_getId(auxEmployee,&lastEmployeeID);
 
 		FILE* pFile;
 		pFile = fopen(path,"rb");
@@ -335,4 +367,25 @@ int controller_saveLastIDEmployee(char* path, int newLastID){//Employee.h
 }
 
 
-*/
+
+/*
+void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
+	FILE* pFile;
+
+	pFile=fopen(path, "wb");
+
+	Employee* auxEmployee = employee_new();
+
+	int id;
+	int index = ll_len(pArrayListEmployee);
+	auxEmployee = (Employee*) ll_get (pArrayListEmployee,index-1);
+
+	employee_ListOneEmployee(auxEmployee,0);
+
+	employee_getId(auxEmployee,&id);
+
+	fwrite(&id,sizeof(int), 1, pFile);
+
+	fclose(pFile);
+
+}*/
