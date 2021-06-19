@@ -95,4 +95,3 @@ void utest_startTest(void(*fncTest)(void),void(*fncBefore)(void),char* testName)
 void utest_printStartTesting(char* testName);
 
 #endif
-

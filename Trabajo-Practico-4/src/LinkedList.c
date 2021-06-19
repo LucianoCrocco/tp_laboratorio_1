@@ -446,32 +446,29 @@ int ll_contains(LinkedList* this, void* pElement)
 int ll_containsAll(LinkedList* this,LinkedList* this2)
 {
     int returnAux = -1;
-    printf("ROMPE1\n\n");
+    //printf("ROMPE1\n\n");
+    //printf("1: %d ----- 2: %d\n\n", ll_len(this), ll_len(this2));
 
     if(this != NULL && this2 != NULL){
-    	int len = ll_len(this);
-    	int len2 = ll_len(this2);
-    	printf("ROMPE2\n\n");
+		returnAux = 1;
+		//printf("ROMPE2\n\n");
+		if(ll_len(this) > 0 && ll_len(this2) > 0){
+			//printf("ROMPE3\n\n");
+			void* pElement = NULL;
+			for(int i=0;i<ll_len(this2);i++){
+				//printf("ROMPE4\n\n");
+				pElement = ll_get(this2, i);
+				if(ll_contains(this, pElement) != 1){
+					returnAux = 0;
+					break;
+				}
+			}
+		} else {
+			returnAux = 0;
+		}
 
-    	if(len == len2){
-    		int i;
-    		void* pAuxElement = NULL;
-    		returnAux = 1;
-    		printf("ROMPE3\n\n");
-    		for(i=0;i<len2;i++){
-    			printf("ROMPE4\n\n");
-    			pAuxElement = ll_get(this2, i);
-    			if(ll_contains(this, pAuxElement) != 1){
-    				printf("ROMPE5\n\n");
-    				returnAux = 0;
-    				break;
-    			}
-    		}
-    	} else {
-    		returnAux = 0;
-    	}
     }
-
+    printf("ROMPE1\n\n");
     return returnAux;
 }
 
