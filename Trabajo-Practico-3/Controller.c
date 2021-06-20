@@ -116,8 +116,6 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 	int rtn = 0;
     int id;
 	int retries = 3;
-	int index;
-	char confirmacion;
 
 	void* editEmployee = NULL;
 
@@ -183,9 +181,17 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 				return 0;
 			} else {
 				if(confirmacion == 'S'){
+
 					deleteEmployee = (Employee*) ll_get(pArrayListEmployee, index);
+
+					LinkedList* listaEmpleadosEliminados = ll_newLinkedList();
+					ll_add(listaEmpleadosEliminados, deleteEmployee);
+					controller_addAsText("dataEliminados.csv", listaEmpleadosEliminados);
+
 					ll_remove(pArrayListEmployee, index);
 					employee_delete(deleteEmployee);
+
+					ll_deleteLinkedList(listaEmpleadosEliminados);
 				} else {
 					puts("\nNo se elimino al empleado");
 				}
@@ -199,6 +205,12 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
     return 1;
 }
 
+/**
+ * \brief Encuentra un ID en la linkedlist y retorna su indice
+ * \param pArrayListEmployee
+ * \param id
+ * \return index
+ */
 int controller_findEmployeeByID(LinkedList* pArrayListEmployee, int id){
 	int i;
 	int rtn;
@@ -392,7 +404,11 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
     return 1;
 }
 
-
+/**
+ * \brief Lee el archivo lastID.dat y devuelve un ID
+ * \param path
+ * \return ID
+ */
 int controller_assignLastID(char* path){
 	FILE* pFile;
 	int rtn = 0;
@@ -406,7 +422,12 @@ int controller_assignLastID(char* path){
 	return rtn;
 }
 
-
+/**
+ * \brief Toma el ultimo ID guardado en la lista de empleados y reemplaza el anterior
+ * \param path
+ * \param pArrayListEmployee
+ * \return 1 bien 0 error
+ */
 int controller_saveLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
 	int rtn = 0;
 	Employee* auxEmployee = NULL;
@@ -436,6 +457,12 @@ int controller_saveLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
 }
 
 
+/**
+ * \brief Si no se cargo el archivo de texto y desea guardarlo sin tener que abrir el archivo esta funcion permite agregar los datos al final del archivo
+ * \param path
+ * \param pArrayListEmployee
+ * \return 1 bien 0 NULL.
+ */
 int controller_addAsText(char* path , LinkedList* pArrayListEmployee){
 	FILE* pFile;
 
@@ -469,6 +496,13 @@ int controller_addAsText(char* path , LinkedList* pArrayListEmployee){
 	return 1;
 
 }
+
+/**
+ * \brief Si no se cargo el archivo biarno y desea guardarlo sin tener que abrir el archivo esta funcion permite agregar los datos al final del archivo
+ * \param path
+ * \param pArrayListEmployee
+ * \return 1 bien 0 NULL.
+ */
 int controller_addAsBinary(char* path , LinkedList* pArrayListEmployee){
 	FILE* pFile;
 
@@ -493,6 +527,42 @@ int controller_addAsBinary(char* path , LinkedList* pArrayListEmployee){
 
 	fclose(pFile);
 
+    return 1;
+}
+
+/**
+ * \brief Agrega un empleado eliminado a la lista actual de empleados.
+ * \param pArrayListEmployee
+ * \param pArrayListElminatedEmployee
+ * \param retries
+ * \return 1 bien 0 NULL
+ */
+int controller_addEliminatedEmployee(LinkedList* pArrayListEmployee, LinkedList* pArrayListElminatedEmployee, int retries)
+{
+
+	Employee* newEmployee;
+
+	if(pArrayListElminatedEmployee != NULL && pArrayListEmployee != NULL){
+
+		controller_ListEmployee(pArrayListElminatedEmployee);
+		int id;
+    	int index;
+    	pedirEntero("Ingrese el ID del empleado que desea agregar nuevamente a la lista de empleados activos: ", &id);
+    	index = controller_findEmployeeByID(pArrayListElminatedEmployee, id);
+
+    	while(index == -1 && retries != 0){
+    			retries--;
+    			printf("\nError al encontrar el empleado, el ID ingresado es inexistente\n");
+    			pedirEntero("Ingrese el ID del empleado que desea agregar nuevamente a la lista de empleados activos: ", &id);
+    			index = controller_findEmployeeByID(pArrayListElminatedEmployee, id);
+    		}
+    	if(index != -1){
+    		newEmployee = ll_get(pArrayListElminatedEmployee, index);
+    		ll_add(pArrayListEmployee, newEmployee);
+		}
+	} else {
+		return 0;
+	}
     return 1;
 }
 

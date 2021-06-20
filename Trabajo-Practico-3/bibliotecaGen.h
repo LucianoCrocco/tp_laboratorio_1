@@ -20,6 +20,7 @@
 /************************************************************************************************************/
 
 int menu(int* pResult);
+int menuAltas(void);
 int pedirFloat(char* mensaje, float* pResultado);
 int pedirFloatConRango(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
 int pedirEntero(char* mensaje, int* pResultado);

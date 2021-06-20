@@ -7,6 +7,10 @@
 #include "Employee.h"
 #include "bibliotecaGen.h"
 
+/**
+ * \brief Constructor por defecto, reserva  memoria dinamica
+ * \return Employee* en memoria dinamica
+ */
 Employee* employee_new(){
 
 	Employee* newEmployee;
@@ -16,6 +20,14 @@ Employee* employee_new(){
 	return newEmployee;
 }
 
+/**
+ * \brief Constructor parametrizado, parsea los datos y los devuelve para añadirlos a la linked list
+ * \param idStr ID leido del .csv
+ * \param nombreStr Nombre leido del .csv
+ * \param horasTrabajadasStr Horas leidas del .csv
+ * \param sueldoStr Sueldo leido del .csv
+ * \return Retorna el empleado parametrizado
+ */
 Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajadasStr, char* sueldoStr){
 	Employee* newEmployee;
 
@@ -29,11 +41,22 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
 	return newEmployee;
 }
 
+/**
+ * \brief Elimina un empleado de la memoria dinamica
+ * \param this
+ */
 void employee_delete(Employee* this){
 	if(this != NULL){
 		free(this);
 	}
 }
+
+/**
+ * \brief Setea el ID de mi elemento
+ * \param this
+ * \param id
+ * \return 1 bien 0 NULL
+ */
 
 int employee_setId(Employee* this,int id){
 
@@ -46,6 +69,13 @@ int employee_setId(Employee* this,int id){
 
 	return rtn;
 }
+
+/**
+ * \brief Devuelve el id de mi elemento
+ * \param this
+ * \param id Direccion de memoria a setear el campo del elemento
+ * \return 1 bien 0 NULL
+ */
 int employee_getId(Employee* this,int* id){
 
 	int rtn = 0;
@@ -58,6 +88,12 @@ int employee_getId(Employee* this,int* id){
 	return rtn;
 }
 
+/**
+ * \brief Setea el nombre de mi elemento
+ * \param this
+ * \param nombre
+ * \return 1 bien 0 NULL
+ */
 int employee_setNombre(Employee* this,char* nombre){
 
 	int rtn = 0;
@@ -69,6 +105,12 @@ int employee_setNombre(Employee* this,char* nombre){
 
 	return rtn;
 }
+/**
+ * \brief Devuelve el nombre de mi elemento
+ * \param this
+ * \param nombre Direccion de memoria a setear el campo del elemento
+ * \return 1 bien 0 NULL
+ */
 int employee_getNombre(Employee* this,char* nombre){
 
 	int rtn = 0;
@@ -82,7 +124,12 @@ int employee_getNombre(Employee* this,char* nombre){
 
 }
 
-
+/**
+ * \brief Setea las horas trabajadas de mi elemento
+ * \param this
+ * \param horasTrabajadas
+ * \return 1 bien 0 NULL
+ */
 int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas){
 
 	int rtn = 0;
@@ -95,6 +142,13 @@ int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas){
 	return rtn;
 
 }
+
+/**
+ * \brief Devuelve las horas trabajadas de mi elemento
+ * \param this
+ * \param horasTrabajadas Direccion de memoria a setear el campo del elemento
+ * \return 1 bien 0 NULL
+ */
 int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas){
 
 	int rtn = 0;
@@ -107,6 +161,12 @@ int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas){
 	return rtn;
 }
 
+/**
+ * \brief Setea el sueldo de mi elemento
+ * \param this
+ * \param sueldo
+ * \return 1 bien 0 NULL
+ */
 int employee_setSueldo(Employee* this,int sueldo){
 
 	int rtn;
@@ -119,6 +179,12 @@ int employee_setSueldo(Employee* this,int sueldo){
 	return rtn;
 
 }
+/**
+ * \brief Devuelve el sueldo de mi elemento
+ * \param this
+ * \param sueldo Direccion de memoria a setear el campo del elemento
+ * \return 1 bien 0 NULL
+ */
 int employee_getSueldo(Employee* this,int* sueldo){
 
 	int rtn = 0;
@@ -132,7 +198,15 @@ int employee_getSueldo(Employee* this,int* sueldo){
 
 }
 
-
+/**
+ * \brief Setea todos los campos de mi elemento
+ * \param this
+ * \param id
+ * \param nombre
+ * \param horasTrabajadas
+ * \param sueldo
+ * \return 1 bien 0 NULL
+ */
 int employee_setAllAtributes(Employee* this, int id, char* nombre, int horasTrabajadas, int sueldo){
 	int rtn = 1;
 
@@ -161,6 +235,15 @@ int employee_setAllAtributes(Employee* this, int id, char* nombre, int horasTrab
 	return rtn;
 }
 
+/**
+ * \brief Devuelve todos los campos mi elemento
+ * \param this
+ * \param id Direccion de memoria a setear el campo del elemento
+ * \param nombre Direccion de memoria a setear el campo del elemento
+ * \param horasTrabajadas Direccion de memoria a setear el campo del elemento
+ * \param sueldo Direccion de memoria a setear el campo del elemento
+ * \return 1 bien 0 NULL
+ */
 int employee_getAllAtributes(Employee* this, int* id, char* nombre, int* horasTrabajadas, int* sueldo){
 
 	int rtn = 1;
@@ -191,7 +274,11 @@ int employee_getAllAtributes(Employee* this, int* id, char* nombre, int* horasTr
 
 }
 
-
+/**
+ * \brief Lista 1 employee
+ * \param this
+ * \param primeraIteracion Una condicion para mostrar la lista con una cabecera o no
+ */
 void employee_ListOneEmployee(Employee* this, int primeraIteracion){
 
 	int id;
@@ -211,7 +298,12 @@ void employee_ListOneEmployee(Employee* this, int primeraIteracion){
 	}
 }
 
-
+/**
+ * \brief Completa los parametros del empleado para que el controller este mas segmentado
+ * \param this
+ * \param retries
+ * \return 0 NULL o error, 1 bien
+ */
 int employee_AddOneEmployee(Employee* this, int retries){
 	int rtn = 0;
 
@@ -231,9 +323,16 @@ int employee_AddOneEmployee(Employee* this, int retries){
 				return 0;
 			}
 
-			pedirEntero("Ingrese el sueldo del nuevo empleado: ", &sueldo);
+			if(pedirEnteroConRango(&sueldo,"Ingrese el sueldo del nuevo empleado: ", "Error... el sueldo no puede ser negativo!", 0, INT_MAX, retries) == 0){
+				puts("\nError al cargar el sueldo del nuevo empleado\n");
+				return 0;
+			}
 
-			pedirEntero("Ingrese la cantidad de horas de trabajo del nuevo empleado: ", &horasTrabajadas);
+
+			if(pedirEnteroConRango(&horasTrabajadas,"Ingrese la cantidad de horas de trabajo del nuevo empleado: ", "Error... la cantidad de horas no pueden ser negativas!", 0, INT_MAX, retries) == 0){
+				puts("\nError al cargar las horas de trabajo nuevo empleado\n");
+				return 0;
+			}
 
 			employee_setAllAtributes(this, id+1, nombre, horasTrabajadas, sueldo);
 
@@ -243,6 +342,13 @@ int employee_AddOneEmployee(Employee* this, int retries){
 
 	return rtn;
 }
+
+/**
+ * \brief Completa los parametros del empleado para que el controller este mas segmentado
+ * \param this
+ * \param retries
+ * \return 0 NULL 1 bien
+ */
 
 int employee_EditOneEmployee(Employee* this, int retries){
 	int rtn = 0;
@@ -290,7 +396,12 @@ int employee_EditOneEmployee(Employee* this, int retries){
 }
 
 
-
+/**
+ * \brief Compara por nombre y le devuelve 1 mayor, -1 menor y 0 igual
+ * \param e1
+ * \param e2
+ * \return retorna el valor comparado
+ */
 int employee_compareByName(void* e1, void* e2){
 	int comp;
 
@@ -313,7 +424,12 @@ int employee_compareByName(void* e1, void* e2){
 	return comp;
 }
 
-
+/**
+ * \brief Compara por id y le devuelve 1 mayor, -1 menor y 0 igual
+ * \param e1
+ * \param e2
+ * \return retorna el valor comparado
+ */
 
 int employee_compareById(void* e1, void* e2){
 
@@ -337,6 +453,12 @@ int employee_compareById(void* e1, void* e2){
 	return comp;
 }
 
+/**
+ * \brief Compara por sueldo y le devuelve 1 mayor, -1 menor y 0 igual
+ * \param e1
+ * \param e2
+ * \return retorna el valor comparado
+ */
 int employee_compareBySueldo(void* e1, void* e2){
 
 	int comp;
@@ -358,6 +480,13 @@ int employee_compareBySueldo(void* e1, void* e2){
 
 	return comp;
 }
+
+/**
+ * \brief Compara por horas trabajadas y le devuelve 1 mayor, -1 menor y 0 igual
+ * \param e1
+ * \param e2
+ * \return retorna el valor comparado
+ */
 
 int employee_compareByHoras(void* e1, void* e2){
 

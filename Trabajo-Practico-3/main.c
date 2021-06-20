@@ -25,11 +25,9 @@ int main()
 	setbuf(stdout,NULL);
 
     int option;
-    int len;
+    int optionAlta;
     int flagCargoTexto = 0;
     int flagCargoBinario = 0;
-    int flagGuardoTexto = 0;
-    int flagGuardoBinario = 0;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
 
@@ -44,8 +42,7 @@ int main()
         {
             case 1:
             	if(flagCargoTexto != 0 || flagCargoBinario != 0){
-            		puts("\nYa se cargaron datos en la memoria, desea volver a cargarlos? (Esto puede descartar las modificaciones hechas previamente si no se guardo su contenido)\n");
-            		//Funciones - subMenu
+            		puts("\nYa se cargaron datos en la memoria\n");
             	} else {
 					if(controller_loadFromText("data.csv",listaEmpleados) == 0) {
 						puts("\nError al cargar el archivo en modo texto\n");
@@ -57,8 +54,7 @@ int main()
                 break;
             case 2:
             	if(flagCargoTexto != 0 && flagCargoBinario != 0){
-            		puts("\nYa se cargaron datos en la memoria, desea volver a cargarlos? (Esto puede descartar las modificaciones hechas previamente si no se guardo su contenido)\n");
-            		//Funciones - subMenu
+            		puts("\nYa se cargaron datos en la memoria.\n");
             	} else {
             		if(controller_loadFromBinary("dataBinary.dat",listaEmpleados)== 0){
             			puts("\nError al cargar el archivo en modo binario\n");
@@ -68,7 +64,24 @@ int main()
             	}
             	break;
             case 3:
-            	controller_addEmployee(listaEmpleados);
+            	optionAlta = menuAltas();
+            	if(optionAlta == 1){
+					controller_addEmployee(listaEmpleados);
+            	} else if(optionAlta == 2){
+
+            		LinkedList* listaEmpleadosEliminados = ll_newLinkedList();
+            		controller_loadFromText("dataEliminados.csv",listaEmpleadosEliminados);
+
+            		if(ll_isEmpty(listaEmpleadosEliminados) == 0){
+
+            			controller_addEliminatedEmployee(listaEmpleados, listaEmpleadosEliminados, 3);
+            			ll_deleteLinkedList(listaEmpleadosEliminados);
+
+            		} else if(ll_isEmpty(listaEmpleadosEliminados) == 1){
+
+            			puts("\nError... no hay empleados eliminados en la base de datos\n");
+            		}
+            	}
             	break;
             case 4:
             	if(ll_isEmpty(listaEmpleados) == 0){
@@ -109,9 +122,11 @@ int main()
             case 8:
             	if(flagCargoTexto != 0){
             		controller_saveAsText("data.csv",listaEmpleados);
+            		controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
             	} else {
             		if(ll_isEmpty(listaEmpleados) == 0){
             			controller_addAsText("data.csv",listaEmpleados);
+            			controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
             		} else {
 						system("clear");
 						puts("\nPara ingresar a esta opcion primero debe cargar datos en memoria!\n");
@@ -122,9 +137,11 @@ int main()
             case 9:
             	if(flagCargoBinario != 0){
             		controller_saveAsBinary("dataBinary.dat",listaEmpleados);
+            		controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
             	} else {
             		if(ll_isEmpty(listaEmpleados) == 0){
             			controller_addAsBinary("dataBinary.dat",listaEmpleados);
+            			controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
             		} else {
 						system("clear");
 						puts("\nPara ingresar a esta opcion primero debe cargar datos en memoria!\n");
@@ -132,14 +149,12 @@ int main()
             		}
             	}
             	break;
-            case 10:
-            	controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
-            	//controller_loadLastIDEmployee("lastID.dat", listaEmpleados);
+            default:
             	puts("\nSaliendo del programa");
             	ll_deleteLinkedList(listaEmpleados);
             	break;
         }
-    }while(option != 11);
+    }while(option != 10);
 
     return EXIT_SUCCESS;
 }

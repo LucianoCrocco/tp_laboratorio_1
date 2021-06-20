@@ -84,6 +84,12 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 
 
 //PROPIAS
+
+/**
+ * \brief Parsea el ID de lastID.dat para generar un ID automatico, lo devuelve
+ * \param pFile
+ * \return 0 error ID si leyo el archivo
+ */
 int parser_IDFromBinary(FILE* pFile){
 
 	int id = 0;

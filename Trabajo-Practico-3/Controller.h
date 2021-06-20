@@ -21,6 +21,7 @@ int controller_assignLastID(char* path);
 int controller_findEmployeeByID(LinkedList* pArrayListEmployee, int id);
 
 int controller_saveLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
-//int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
-//int controller_saveLastIDEmployee(char* path, int newLastID);
 
+
+
+int controller_addEliminatedEmployee(LinkedList* pArrayListEmployee, LinkedList* pArrayListElminatedEmployee, int retries);
