@@ -36,4 +36,16 @@ int employee_getAllAtributes(Employee* this, int* id, char* nombre, int* horasTr
 void employee_ListOneEmployee(Employee* this, int primeraIteracion);
 
 int employee_AddOneEmployee(Employee* this, int retries);
+
+int employee_EditOneEmployee(Employee* this, int retries);
+
+
+int employee_compareByName(void* e1, void* e2);
+
+int employee_compareById(void* e1, void* e2);
+
+int employee_compareBySueldo(void* e1, void* e2);
+
+int employee_compareByHoras(void* e1, void* e2);
+
 #endif // employee_H_INCLUDED

@@ -14,14 +14,13 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee);
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee);
 
 //PROPIAS
+int controller_addAsText(char* path , LinkedList* pArrayListEmployee);
+int controller_addAsBinary(char* path , LinkedList* pArrayListEmployee);
+
 int controller_assignLastID(char* path);
 int controller_findEmployeeByID(LinkedList* pArrayListEmployee, int id);
 
-int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
-int controller_saveLastIDEmployee(char* path, int newLastID);
-
-
-
-//AUXILIARES
-//void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee);
+int controller_saveLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
+//int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee);
+//int controller_saveLastIDEmployee(char* path, int newLastID);
 

@@ -113,7 +113,37 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int rtn = 0;
+    int id;
+	int retries = 3;
+	int index;
+	char confirmacion;
+
+	void* editEmployee = NULL;
+
+    if(pArrayListEmployee != NULL){
+    	int index;
+    	pedirEntero("Ingrese el ID del empleado que desea editar: ", &id);
+    	index = controller_findEmployeeByID(pArrayListEmployee, id);
+
+    	while(index == -1 && retries != 0){
+    			retries--;
+    			printf("\nError al encontrar el empleado, el ID ingresado es inexistente\n");
+    			pedirEntero("Ingrese el ID del empleado que desea elminar: ", &id);
+    			index = controller_findEmployeeByID(pArrayListEmployee, id);
+    		}
+
+    	if(index != -1){
+    		editEmployee = ll_get(pArrayListEmployee, index);
+    		if(employee_EditOneEmployee(editEmployee, 5) == 0){
+    			puts("\nError al editar el empleado");
+    		} else {
+    			rtn = 1;
+    		}
+		}
+    }
+
+    return rtn;
 }
 
 /** \brief Baja de empleado
@@ -130,11 +160,11 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 	int index;
 	char confirmacion;
 
-	Employee* deleteEmployee = employee_new();
+	Employee* deleteEmployee = NULL;
 
-	if(pArrayListEmployee != NULL && deleteEmployee != NULL){
+	if(pArrayListEmployee != NULL){
 
-		pedirEntero("Ingrese el ID del empleado que desea elminar: ", &id);
+		pedirEntero("Ingrese el ID del empleado que desea eliminar: ", &id);
 		index = controller_findEmployeeByID(pArrayListEmployee, id);
 
 		while(index == -1 && retries != 0){
@@ -145,13 +175,15 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 		}
 
 		if(index != -1){
-			if(get_YesNo(&confirmacion, "Ingrese 'S' si desea sumarlo al sistema, 'N' si desea descartar los datos ingresados: ", "Error... Ingrese 'S' o 'N' solamente", retries) == 0){
+			deleteEmployee = ll_get(pArrayListEmployee, index);
+			puts("\n\t\tDatos del empleado a eliminar\n");
+			employee_ListOneEmployee(deleteEmployee,0);
+			if(get_YesNo(&confirmacion, "\nIngrese 'S' si desea removerlo del sistema, 'N' si desea que continuen los datos en el sistema: ", "Error... Ingrese 'S' o 'N' solamente", retries) == 0){
 				puts("\nError al confirmar la eliminacion del empleado\n");
 				return 0;
 			} else {
 				if(confirmacion == 'S'){
 					deleteEmployee = (Employee*) ll_get(pArrayListEmployee, index);
-					//Agregarlo a un dataDeleted.csv
 					ll_remove(pArrayListEmployee, index);
 					employee_delete(deleteEmployee);
 				} else {
@@ -219,7 +251,67 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int rtn = 0;
+	if(pArrayListEmployee != NULL){
+		int opcion;
+		do {
+			if(pedirEnteroConRango(&opcion, "\nIngrese la opcion por la cual desea ordenar la lista\n\n1. Nombre [A-Z]\n2. Nombre [Z-A]\n3. ID [1-0]\n4. ID [0-1]\n5. Sueldo [1-0]\n6. Sueldo [0-1]\n7. Horas Trabajadas [1-0]\n8. Horas Trabajadas [0-1]\n9. Salir: ", "Error... Ingrese una opcion valida", 1, 9, 5) == 1){
+				switch(opcion){
+					case 1:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareByName,1);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 2:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareByName,0);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 3:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareById,0);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 4:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareById,1);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 5:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareBySueldo,0);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 6:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareBySueldo,1);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+
+						break;
+					case 7:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareByHoras,0);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+					case 8:
+				        puts("\n[ORDENANDO]... \n\n");
+				        ll_sort(pArrayListEmployee,employee_compareByHoras,1);
+				        controller_ListEmployee(pArrayListEmployee);
+				        rtn=1;
+						break;
+				}
+			}
+
+		} while(opcion != 9);
+	}
+    return rtn;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
@@ -280,23 +372,22 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 	int len;
 	int i;
 
-	len = ll_len(pArrayListEmployee);
-	Employee* auxEmployee;
+	if(path != NULL && pArrayListEmployee != NULL){
+		len = ll_len(pArrayListEmployee);
+		Employee* auxEmployee;
 
-	pFile=fopen(path,"wb");
-
-	if(pFile != NULL){
+		pFile=fopen(path,"wb");
 
 		for(i=0;i<len;i++){
 			auxEmployee=ll_get(pArrayListEmployee, i);
 			fwrite(auxEmployee,sizeof(Employee),1,pFile);
 		}
 
+		fclose(pFile);
 	} else {
 		return 0;
 	}
 
-	fclose(pFile);
 
     return 1;
 }
@@ -316,76 +407,92 @@ int controller_assignLastID(char* path){
 }
 
 
-int controller_loadLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
+int controller_saveLastIDEmployee(char* path, LinkedList* pArrayListEmployee){
 	int rtn = 0;
-
-	Employee* auxEmployee = employee_new();
-
-	int lastIDSaved;
+	Employee* auxEmployee = NULL;
 	int lastEmployeeID;
+	int lastIDSaved;
 
 	if(path != NULL && pArrayListEmployee != NULL){
-
 		int len = ll_len(pArrayListEmployee);
 		auxEmployee = ll_get(pArrayListEmployee,len-1);
 		employee_getId(auxEmployee,&lastEmployeeID);
 
 		FILE* pFile;
-		pFile = fopen(path,"rb");
 
+		pFile = fopen(path, "rb");
 		fread(&lastIDSaved,sizeof(int),1,pFile);
+		fclose(pFile);
 
 		if(lastIDSaved < lastEmployeeID){
-			controller_saveLastIDEmployee(path, lastIDSaved);
+			pFile = fopen(path,"wb");
+			fwrite(&lastEmployeeID,sizeof(int),1,pFile);
+			fclose(pFile);
+			rtn = 1;
 		}
 
-		fclose(pFile);
-		rtn = 1;
 	}
-
-
 	return rtn;
 }
 
 
-
-
-int controller_saveLastIDEmployee(char* path, int newLastID){//Employee.h
-	int rtn = 0;
-
-
-	if(path !=NULL){
-		FILE* pFile;
-
-		pFile = fopen(path,"wb");
-		fwrite(&newLastID,sizeof(int),1,pFile);
-		fclose(pFile);
-		rtn = 1;
-	}
-
-	return rtn;
-}
-
-
-
-/*
-void controller_generateIDEmployee(char* path, LinkedList* pArrayListEmployee){
+int controller_addAsText(char* path , LinkedList* pArrayListEmployee){
 	FILE* pFile;
 
-	pFile=fopen(path, "wb");
+	int len;
+	int i;
 
+	len = ll_len(pArrayListEmployee);
 	Employee* auxEmployee = employee_new();
 
-	int id;
-	int index = ll_len(pArrayListEmployee);
-	auxEmployee = (Employee*) ll_get (pArrayListEmployee,index-1);
+	pFile=fopen(path,"a");
 
-	employee_ListOneEmployee(auxEmployee,0);
+	if(pFile != NULL){
+		int id;
+		char nombre[STRING_LENGHT];
+		int horasTrabajadas;
+		int sueldo;
 
-	employee_getId(auxEmployee,&id);
+		for(i=0;i<len;i++){//Para que no escriba los header del csv
+			auxEmployee=ll_get(pArrayListEmployee, i);
 
-	fwrite(&id,sizeof(int), 1, pFile);
+			employee_getAllAtributes(auxEmployee, &id, nombre, &horasTrabajadas, &sueldo);
+
+			fprintf(pFile,"%d,%s,%d,%d\n", id, nombre, horasTrabajadas, sueldo);
+		}
+	} else {
+		return 0;
+	}
 
 	fclose(pFile);
 
-}*/
+	return 1;
+
+}
+int controller_addAsBinary(char* path , LinkedList* pArrayListEmployee){
+	FILE* pFile;
+
+	int len;
+	int i;
+
+	len = ll_len(pArrayListEmployee);
+	Employee* auxEmployee;
+
+	pFile=fopen(path,"ab");
+
+	if(pFile != NULL){
+
+		for(i=0;i<len;i++){
+			auxEmployee=ll_get(pArrayListEmployee, i);
+			fwrite(auxEmployee,sizeof(Employee),1,pFile);
+		}
+
+	} else {
+		return 0;
+	}
+
+	fclose(pFile);
+
+    return 1;
+}
+

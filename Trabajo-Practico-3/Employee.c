@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "Controller.h"
 #include "LinkedList.h"
 #include "Employee.h"
@@ -243,3 +244,139 @@ int employee_AddOneEmployee(Employee* this, int retries){
 	return rtn;
 }
 
+int employee_EditOneEmployee(Employee* this, int retries){
+	int rtn = 0;
+
+	char nombre[STRING_LENGHT];
+	int horasTrabajadas;
+	int sueldo;
+	int option;
+
+	if (this != NULL && retries > 0){
+		do {
+			pedirEnteroConRango(&option,"\n1. Editar Nombre\n2. Editar sueldo\n3. Editar horas trabajadas\n4. Salir: ", "Error... Ingrese una opcion valida", 0, 4, 4);
+
+			switch(option){
+				case 1:
+					if(get_Name(nombre, retries, STRING_LENGHT) == 0){
+						puts("\nError al cargar el nuevo nombre del empleado\n");
+					} else {
+						employee_setNombre(this, nombre);
+						puts("\nSe cargo el nuevo nombre correctamente\n");
+					}
+					break;
+				case 2:
+					if(pedirEnteroConRango(&sueldo, "\nIngrese el sueldo nuevo sueldo del empleado: ", "Error... Ingrese un sueldo valido", 0, INT_MAX, 4) == 0){
+						puts("\nError al cargar el nuevo sueldo del empleado\n");
+					} else {
+						employee_setSueldo(this, sueldo);
+						puts("\nSe cargo el nuevo sueldo correctamente\n");
+					}
+					break;
+				case 3:
+					if(pedirEnteroConRango(&horasTrabajadas, "\nIngrese la nueva cantidad de horas de trabajo del empleado: ", "Error... Ingrese una cantidad valida", 0, INT_MAX, 4) == 0){
+						puts("\nError al cargar las nuevas horas trabajadas del empleado\n");
+					} else{
+						employee_setHorasTrabajadas(this, horasTrabajadas);
+						puts("\nSe cargo las nuevas horas trabajadas correctamente\n");
+					}
+					break;
+			}
+			rtn = 1;
+		}while(option != 4);
+	}
+
+	return rtn;
+}
+
+
+
+int employee_compareByName(void* e1, void* e2){
+	int comp;
+
+	Employee* emp1;
+	Employee* emp2;
+
+	emp1 = (Employee*) e1;
+	emp2 = (Employee*) e2;
+
+	if(strcmp(emp1->nombre,emp2->nombre) > 0){
+		comp = 1;
+	} else {
+		if(strcmp(emp1->nombre,emp2->nombre) < 0){
+			comp = -1;
+		} else {
+			comp = 0;
+		}
+	}
+
+	return comp;
+}
+
+
+
+int employee_compareById(void* e1, void* e2){
+
+	int comp;
+	Employee* emp1;
+	Employee* emp2;
+
+	comp = 0;
+
+	emp1 = (Employee*) e1;
+	emp2 = (Employee*) e2;
+
+	if(emp1->id > emp2->id){
+		comp = 1;
+	} else {
+		if(emp1->id < emp2->id){
+			comp = -1;
+		}
+	}
+
+	return comp;
+}
+
+int employee_compareBySueldo(void* e1, void* e2){
+
+	int comp;
+	Employee* emp1;
+	Employee* emp2;
+
+	comp = 0;
+
+	emp1 = (Employee*) e1;
+	emp2 = (Employee*) e2;
+
+	if(emp1->sueldo > emp2->sueldo){
+		comp = 1;
+	} else {
+		if(emp1->sueldo < emp2->sueldo){
+			comp = -1;
+		}
+	}
+
+	return comp;
+}
+
+int employee_compareByHoras(void* e1, void* e2){
+
+	int comp;
+	Employee* emp1;
+	Employee* emp2;
+
+	comp = 0;
+
+	emp1 = (Employee*) e1;
+	emp2 = (Employee*) e2;
+
+	if(emp1->horasTrabajadas > emp2->horasTrabajadas){
+		comp = 1;
+	} else {
+		if(emp1->horasTrabajadas < emp2->horasTrabajadas){
+			comp = -1;
+		}
+	}
+
+	return comp;
+}

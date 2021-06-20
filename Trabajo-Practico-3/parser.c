@@ -23,7 +23,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 
 	int flag = 0;
 
-	if(pFile != NULL){
+	if(pFile != NULL && pArrayListEmployee != NULL){
 
 		while(!feof(pFile)){
 			if(flag == 0){
@@ -60,18 +60,19 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
  */
 int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 {
-	Employee* auxEmployee = employee_new();
 
-	if(pFile != NULL){
+	if(pFile != NULL && pArrayListEmployee != NULL){
 
-		while(!feof(pFile) && pArrayListEmployee != NULL){
-
-			if(auxEmployee != NULL){
+		while(!feof(pFile)){
+				Employee* auxEmployee = employee_new();
 				fread(auxEmployee,sizeof(Employee),1,pFile);
-				ll_add(pArrayListEmployee, auxEmployee);
+
+			if(feof(pFile)){//Para que me pueda cargar el ultimo empleado de manera correcta.
+				break;
 			} else {
-				return 0;
+				ll_add(pArrayListEmployee, auxEmployee);
 			}
+
 		}
 	} else {
 		return 0;

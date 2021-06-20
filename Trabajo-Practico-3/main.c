@@ -32,10 +32,6 @@ int main()
     int flagGuardoBinario = 0;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
-    int id;
-
-    id = controller_assignLastID("lastID.dat");
-    printf("-------------------%d--------------------\n\n\n",id);
 
     do{
 
@@ -43,9 +39,6 @@ int main()
     		puts("\nError en el menu de usuario\n");
     		option = 10;
     	}
-
-
-    	len = ll_len(listaEmpleados);//isEmpty
 
         switch(option)
         {
@@ -76,19 +69,10 @@ int main()
             	break;
             case 3:
             	controller_addEmployee(listaEmpleados);
-            	/*
-            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
-            		system("clear");
-
-            	} else {
-            		system("clear");
-            		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
-            		system("pause");
-            	}*/
             	break;
             case 4:
-            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
-					//controller_addEmployee(listaEmpleados);
+            	if(ll_isEmpty(listaEmpleados) == 0){
+					controller_editEmployee(listaEmpleados);
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
@@ -96,7 +80,7 @@ int main()
             	}
             	break;
             case 5:
-            	if(flagCargoTexto != 0 || flagCargoBinario != 0){
+            	if(ll_isEmpty(listaEmpleados) == 0){
 					controller_removeEmployee(listaEmpleados);
             	} else {
             		system("clear");
@@ -105,7 +89,7 @@ int main()
             	}
             	break;
             case 6:
-            	if(len > 0){
+            	if(ll_isEmpty(listaEmpleados) == 0){
             		controller_ListEmployee(listaEmpleados);
             	} else {
             		system("clear");
@@ -114,8 +98,8 @@ int main()
             	}
             	break;
             case 7:
-            	if(len > 0){
-            		//controller_ListEmployee(listaEmpleados);
+            	if(ll_isEmpty(listaEmpleados) == 0){
+            		controller_sortEmployee(listaEmpleados);
             	} else {
             		system("clear");
             		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
@@ -123,27 +107,34 @@ int main()
             	}
             	break;
             case 8:
-            	if(len > 0){
+            	if(flagCargoTexto != 0){
             		controller_saveAsText("data.csv",listaEmpleados);
             	} else {
-            		system("clear");
-            		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
-            		system("pause");
+            		if(ll_isEmpty(listaEmpleados) == 0){
+            			controller_addAsText("data.csv",listaEmpleados);
+            		} else {
+						system("clear");
+						puts("\nPara ingresar a esta opcion primero debe cargar datos en memoria!\n");
+						system("pause");
+            		}
             	}
             	break;
             case 9:
-            	if(len > 0){
+            	if(flagCargoBinario != 0){
             		controller_saveAsBinary("dataBinary.dat",listaEmpleados);
             	} else {
-            		system("clear");
-            		puts("\nPara ingresar a esta opcion primero debe cargar los datos de los archivos!\n");
-            		system("pause");
+            		if(ll_isEmpty(listaEmpleados) == 0){
+            			controller_addAsBinary("dataBinary.dat",listaEmpleados);
+            		} else {
+						system("clear");
+						puts("\nPara ingresar a esta opcion primero debe cargar datos en memoria!\n");
+						system("pause");
+            		}
             	}
             	break;
             case 10:
-            	//controller_generateIDEmployee("lastID.dat", listaEmpleados);
-            	///HACER UN CASE MAS, Y HACER VALIDACIONES DE QUE SI HUBO MODIFICACIONES SE LE AVISE AL USUARIO.
-            	controller_loadLastIDEmployee("lastID.dat", listaEmpleados);
+            	controller_saveLastIDEmployee("lastID.dat", listaEmpleados);
+            	//controller_loadLastIDEmployee("lastID.dat", listaEmpleados);
             	puts("\nSaliendo del programa");
             	ll_deleteLinkedList(listaEmpleados);
             	break;

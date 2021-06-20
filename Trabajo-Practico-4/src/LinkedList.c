@@ -160,8 +160,8 @@ int ll_add(LinkedList* this, void* pElement)
     int validar;
 
     if(this != NULL){
-		validar = addNode(this, len, pElement);
-		returnAux = validar;
+		addNode(this, len, pElement);
+		returnAux = 0;
     }
 
 
@@ -455,10 +455,11 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 		if(ll_len(this) > 0 && ll_len(this2) > 0){
 			//printf("ROMPE3\n\n");
 			void* pElement = NULL;
-			for(int i=0;i<ll_len(this2);i++){
-				//printf("ROMPE4\n\n");
+			for(int i=0; i<ll_len(this2); i++){
 				pElement = ll_get(this2, i);
+				//printf("ROMPE4\n\n");
 				if(ll_contains(this, pElement) != 1){
+					//printf("ROMPE5\n\n");
 					returnAux = 0;
 					break;
 				}
@@ -468,7 +469,6 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 		}
 
     }
-    printf("ROMPE1\n\n");
     return returnAux;
 }
 
