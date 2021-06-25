@@ -8,7 +8,7 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
-
+#define STRING_LENGHT_BUFFER 500
 /************************************************************************************************************/
 /**************************************************UTILIDADES************************************************/
 /************************************************************************************************************/
@@ -54,37 +54,29 @@ int pedirEntero(char mensaje[]);
  */
 float pedirFloat(char mensaje[]);
 
-/**
- * @brief Comprueba que la cadena de chars ingresada no sobrepase el limite
- *
- * @param string char
- * @param len int
- * @return 1 si supera, 0 si no supera o hay error de nulidad.
- */
-int comprobarLenghtString(char string[], int len);
+/************************************************************************************************************/
+/**************************************FUNCIONES PARA CORREGIR EL TP2****************************************/
+/************************************************************************************************************/
+int get_String(char* pResult, char* msg, char* errorMsg, int retries, int lenght);
 
-/**
- * @brief Emula la funcion strlwr de Code Blocks
- *
- * @param string char
- * @param len int
- */
-void strlwr(char string[], int len);
+int get_Name(char* pResult, char* mensaje, char* mensajeError, int retries, int lenght);
 
-/**
- * @brief Hace que la cadena de caracteres alfabeticos ingresado comience con mayusculas.
- *
- * @param string char
- * @param len int
- */
-void normalizarCadenaAlfabetica(char string[], int len);
+void strlwr(char* string, int len);
 
-/**
- * @brief Comprueba que la cadena ingresada sea solo alfabetica
- *
- * @param string char
- * @param len int
- * @return 1 si la cadena es alfabetica, 0 si no supera o hay error de nulidad.
- */
-int comprobarSoloAlfabetico(char string[], int len);
+void normalizarCadenaAlfabetica(char* string, int len);
+
+int comprobarSoloAlfabetico(char* string, int len);
+
+int get_Integer(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos);
+
+int check_overFlowSpaceInt(char* string);
+
+int check_onlyNumbers(char* string, int len);
+
+int get_Float(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos);
+
+int check_onlyNumbersFloat(char* string, int len);
+
+int check_overFlowSpaceFloat(char* string);
+
 #endif /* UTILITIES_H_ */

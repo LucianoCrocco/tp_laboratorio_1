@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
+#include <float.h>
 #include "eEmployee.h"
 #include "Utilities.h"
 
@@ -73,6 +75,7 @@ int initEmployees(Employee list[], int len){
 
 int addEmployee(Employee list[], int len) {
 	int index;
+	int retries = 5;
 
 	index = comprobarEspaciosVaciosEstructura(list, len);
 
@@ -80,47 +83,26 @@ int addEmployee(Employee list[], int len) {
 
 		list[index].id=generar_ID(index, 1);
 
-		printf("\nIngrese el nombre del empleado: ");
-		__fpurge(stdin);
-		scanf("%[^\n]", list[index].name);
-		if(comprobarLenghtString(list[index].name,STRING_LENGHT_EEMPLOYEE) == 0){
-			printf("Ingrese el nombre del empleado: ");
-			__fpurge(stdin);
-			scanf("%[^\n]", list[index].name);
-		} else {
-			if(comprobarSoloAlfabetico(list[index].name,STRING_LENGHT_EEMPLOYEE) == 0){
-				printf("\nError... Ingrese solo caracteres\n\n");
-				printf("Ingrese el nombre del empleado: ");
-				__fpurge(stdin);
-				scanf("%[^\n]", list[index].name);
-			} else {
-				strlwr(list[index].name, STRING_LENGHT_EEMPLOYEE);
-				normalizarCadenaAlfabetica(list[index].name, STRING_LENGHT_EEMPLOYEE);
-			}
+
+		if(get_Name(list[index].name, "Ingrese el nombre del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
+			puts("\nError al cargar el nombre del nuevo empleado\n");
+			return 0;
 		}
 
-		printf("Ingrese el apellido del empleado: ");
-		__fpurge(stdin);
-		scanf("%[^\n]", list[index].lastName);
-		if(comprobarLenghtString(list[index].lastName,STRING_LENGHT_EEMPLOYEE) == 0){
-			printf("Ingrese el apellido del empleado: ");
-			__fpurge(stdin);
-			scanf("%[^\n]", list[index].lastName);
-		} else {
-			if(comprobarSoloAlfabetico(list[index].lastName,STRING_LENGHT_EEMPLOYEE) == 0){
-				printf("\nError... Ingrese solo caracteres\n\n");
-				printf("Ingrese el apellido del empleado: ");
-				__fpurge(stdin);
-				scanf("%[^\n]", list[index].lastName);
-			} else {
-				strlwr(list[index].lastName, STRING_LENGHT_EEMPLOYEE);
-				normalizarCadenaAlfabetica(list[index].lastName, STRING_LENGHT_EEMPLOYEE);
-			}
+		if(get_Name(list[index].lastName, "Ingrese el apellido del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
+			puts("\nError al cargar el apellido del nuevo empleado\n");
+			return 0;
 		}
 
-		list[index].salary=pedirFloat("Ingrese el salario del empleado: ");
+		if(get_Float(&list[index].salary, "Ingrese el salario del empleado: ", "Error...", 0, 1000000, retries)== 0){
+			puts("\nError al cargar el sueldo del nuevo empleado\n");
+			return 0;
+		}
 
-		list[index].sector=pedirEntero("Ingrese el numero del sector al que pertenece el empleado: ");
+		if(get_Integer(&list[index].sector, "Ingrese el numero del sector al que pertenece el empleado: ", "Error...", 0, 100, retries)== 0){
+			puts("\nError al cargar el sector del nuevo empleado\n");
+			return 0;
+		}
 
 		list[index].isEmpty=FALSE;
 
@@ -152,17 +134,23 @@ int askModifyEmployee(Employee list[], int len){
 	int reintentos;
 	int rtn;
 
-	reintentos = 0;
+	reintentos = 3;
 	rtn = 0;
 
 	if(list != NULL && len >= 0){
 		printEmployees(list, len);
-		datoABuscar = pedirEntero("\nIngrese el ID del empleado para modificar los datos: ");
+		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+			puts("\nError al encontrar el ID del empleado a modificar\n");
+			return 0;
+		}
 		index = findEmployeeById(list,len,datoABuscar);
-		while(index == -1 && reintentos < 3){
-			datoABuscar = pedirEntero("\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ");
+		while(index == -1 && reintentos > 0){
+			if(get_Integer(&datoABuscar, "\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+				puts("\nError al encontrar el ID del empleado a modificar\n");
+				return 0;
+			}
 			index = findEmployeeById(list,len,datoABuscar);
-			reintentos++;
+			reintentos--;
 		}
 
 		if(index != -1){
@@ -184,6 +172,7 @@ int modifyEmployee(Employee list[], int len, int index){
 	int option;
 	int rtn;
 	int flagCambio;
+	int retries = 5;
 
 	int intAux;
 	float floatAux;
@@ -197,57 +186,34 @@ int modifyEmployee(Employee list[], int len, int index){
 
 			switch(option){
 				case 1:
-					printf("\nIngrese el nuevo nombre del empleado: ");
-					__fpurge(stdin);
-					scanf("%[^\n]", list[index].name);
-					if(comprobarLenghtString(list[index].name,STRING_LENGHT_EEMPLOYEE) == 0){
-						printf("\nIngrese el nuevo nombre del empleado: ");
-						__fpurge(stdin);
-						scanf("%[^\n]", list[index].name);
-					} else {
-						if(comprobarSoloAlfabetico(list[index].name,STRING_LENGHT_EEMPLOYEE) == 0){
-							printf("\nError... Ingrese solo caracteres\n\n");
-							printf("\nIngrese el nuevo nombre del empleado: ");
-							__fpurge(stdin);
-							scanf("%[^\n]", list[index].name);
-						} else {
-							strlwr(list[index].name, STRING_LENGHT_EEMPLOYEE);
-							normalizarCadenaAlfabetica(list[index].name, STRING_LENGHT_EEMPLOYEE);
-							flagCambio++;
-						}
+					if(get_Name(list[index].name, "Ingrese el nuevo nombre del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
+						puts("\nError al cargar el nombre del nuevo empleado\n");
+						return 0;
 					}
+					flagCambio++;
+
 					break;
 				case 2:
 
-					printf("\nIngrese el nuevo apellido del empleado: ");
-					__fpurge(stdin);
-					scanf("%[^\n]", list[index].lastName);
-					if(comprobarLenghtString(list[index].lastName,STRING_LENGHT_EEMPLOYEE) == 0){
-						printf("\nIngrese el nuevo apellido del empleado: ");
-						__fpurge(stdin);
-						scanf("%[^\n]", list[index].lastName);
-					} else {
-						if(comprobarSoloAlfabetico(list[index].lastName,STRING_LENGHT_EEMPLOYEE) == 0){
-							printf("\nError... Ingrese solo caracteres\n\n");
-							printf("\nIngrese el nuevo apellido del empleado: ");
-							__fpurge(stdin);
-							scanf("%[^\n]", list[index].lastName);
-						} else {
-							strlwr(list[index].lastName, STRING_LENGHT_EEMPLOYEE);
-							normalizarCadenaAlfabetica(list[index].lastName, STRING_LENGHT_EEMPLOYEE);
-							flagCambio++;
-						}
+					if(get_Name(list[index].lastName, "Ingrese el nuevo apellido del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
+						puts("\nError al cargar el apellido del nuevo empleado\n");
+						return 0;
 					}
+					flagCambio++;
 					break;
 				case 3:
-					floatAux=pedirFloat("\nIngrese el nuevo salario del empleado: ");
-					printf("Nuevo salario cargado: %.2f, el viejo era: %.2f\n", floatAux, list[index].salary);
+					if(get_Float(&floatAux, "Ingrese el salario del empleado: ", "Error...", 0, 1000000, retries)== 0){
+						puts("\nError al cargar el sueldo del nuevo empleado\n");
+						return 0;
+					}
 					list[index].salary = floatAux;
 					flagCambio++;
 					break;
 				case 4:
-					intAux=pedirEntero("\nIngrese el nuevo numero del Dector al que pertenece el empleado: ");
-					printf("Nuevo sector cargado: %d, el viejo era: %.d\n", intAux, list[index].sector);
+					if(get_Integer(&intAux, "Ingrese nuevo numero del sector al que pertenece el empleado: ", "Error...", 0, 100, retries)== 0){
+						puts("\nError al cargar el sector del nuevo empleado\n");
+						return 0;
+					}
 					list[index].sector = intAux;
 					flagCambio++;
 					break;
@@ -265,17 +231,23 @@ int askRemoveEmployee(Employee list[], int len){
 	int index;
 	int rtn;
 
-	reintentos = 0;
+	reintentos = 5;
 	rtn = 0;
 
 	if(list != NULL && len >= 0){
 		printEmployees(list, len);
-		datoABuscar = pedirEntero("\nIngrese el ID del empleado para borrar los datos: ");
+		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para borrar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+			puts("\nError al encontrar el ID del empleado a borrar\n");
+			return 0;
+		}
 		index = findEmployeeById(list,len,datoABuscar);
-		while(index == -1 && reintentos < 3){
-			datoABuscar = pedirEntero("\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ");
+		while(index == -1 && reintentos > 0){
+			if(get_Integer(&datoABuscar, "\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+				puts("\nError al el ID del empleado a  borrar\n");
+				return 0;
+			}
 			index = findEmployeeById(list,len,datoABuscar);
-			reintentos++;
+			reintentos--;
 		}
 
 		if(index != -1){
