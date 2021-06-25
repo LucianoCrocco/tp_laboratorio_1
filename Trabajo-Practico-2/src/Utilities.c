@@ -326,8 +326,7 @@ int check_overFlowSpaceInt(char* string){
 
 int check_onlyNumbers(char* string, int len){
 	int i;
-	int rtn;
-	rtn = 0;
+	int rtn = 0;
 	int flag = 0;
 	int flagNumero = 0;
 
@@ -337,7 +336,7 @@ int check_onlyNumbers(char* string, int len){
 				rtn = 1;
 				break;
 			} else {
-				if(string[0] == '+' || string[0] == '-'){
+				if((string[0] == '+' || string[0] == '-') && flag == 0){
 					flag++;
 				} else {
 					if((string[i] < '0' || string[i] > '9')){
@@ -352,9 +351,14 @@ int check_onlyNumbers(char* string, int len){
 
 	if(flag == 1 && flagNumero == 0){
 		rtn = 0;
+	} else {
+		if(flagNumero == 0){
+			rtn = 0;
+		}
 	}
 	return rtn;
 }
+
 
 
 int get_Float(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos){
@@ -407,8 +411,7 @@ int get_Float(float* pResultado, char* mensaje, char* mensajeError, float minimo
 
 int check_onlyNumbersFloat(char* string, int len){
 	int i;
-	int rtn;
-	rtn = 0;
+	int rtn = 0;
 	int flag = 0;
 	int flagNumero = 0;
 	int flagPunto = 0;
@@ -419,11 +422,13 @@ int check_onlyNumbersFloat(char* string, int len){
 				rtn = 1;
 				break;
 			} else {
-				if(string[0] == '+' || string[0] == '-'){
+				if((string[0] == '+' || string[0] == '-') && flag == 0){
 					flag++;
 				} else {
 					if((string[i] < '0' || string[i] > '9') && string[i] != '.'){
 						return 0;
+					} else {
+						flagNumero++;
 					}
 					if(string[i] == '.'){
 						flagPunto++;
@@ -432,13 +437,12 @@ int check_onlyNumbersFloat(char* string, int len){
 			}
 		}
 	}
-
 	if(flag == 1 && flagNumero == 0){
 		rtn = 0;
-	} else {
-		if(flagPunto > 1){
-			rtn = 0;
-		}
+	} else if (flagPunto > 1){
+		rtn = 0;
+	} else if (flagNumero == 0){
+		rtn = 0;
 	}
 	return rtn;
 }
