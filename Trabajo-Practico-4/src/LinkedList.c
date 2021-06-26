@@ -103,19 +103,16 @@ static int addNode(LinkedList* this, int nodeIndex,void* pElement)
 {
     int returnAux = -1;
 
-    if(this != NULL /*&& pElement != NULL */&& nodeIndex > -1){//El error es pq en el primer test le pasa un pElement nulo, por lo tanto nunca entra al if
+    if(this != NULL && nodeIndex > -1){
 
     	int len = ll_len(this);
-
-    	//printf("-----%d----\n", len);//El size se incremeta, es un error del test, se comprueba con los printf
-    	//printf("......%d.....\n", this->size);
 
     	Node* pNode = (Node*) malloc (sizeof(Node));
     	Node* pAuxNode = NULL;
 
     	if(len > -1 && nodeIndex <= len && pNode != NULL){
     		if(nodeIndex == 0){
-    			pNode->pNextNode=getNode(this, nodeIndex);//Si no hay un nodo siguiente devuelve NULL | Por lo tanto siempre this->pFirstNode == NULL es innecesario
+    			pNode->pNextNode=getNode(this, nodeIndex);
     			this->pFirstNode=pNode;
     		} else {
     			pAuxNode=getNode(this,nodeIndex-1);
@@ -188,9 +185,7 @@ void* ll_get(LinkedList* this, int index)
 	   if(len > -1 && index < len){
 		   pNode = getNode(this,index);
 		   returnAux = pNode->pElement;
-
 	   }
-
    }
 
    return returnAux;
@@ -210,15 +205,15 @@ int ll_set(LinkedList* this, int index,void* pElement)
 {
     int returnAux = -1;
 
-    if(this != NULL && index > -1 /*&& pElement != NULL*/){// mismo problema que el addNode, no se puede verificar pElement != NULL xq el test le pasa un NULL.
+    if(this != NULL && index > -1){
         int len = ll_len(this);
         Node* pNode = NULL;
         if(index < len){
         	pNode = getNode(this, index);
-        	if(pNode != NULL){//En teoria se podria eliminar
-				pNode->pElement=pElement;
-				returnAux = 0;
-        	}
+			pNode->pElement=pElement;
+			returnAux = 0;
+        	/*if(pNode != NULL){
+        	}*/
         }
     }
 
@@ -234,12 +229,45 @@ int ll_set(LinkedList* this, int index,void* pElement)
                         ( 0) Si funciono correctamente
  *
  */
-int ll_remove(LinkedList* this,int index)
+int ll_remove(LinkedList* this,int index)//ESTA FUNCION HACE ROMPER EL LL_CONTAINSALL
 {
     int returnAux = -1;
 
 
-    if(this != NULL && index > -1){
+    Node* current;
+    Node* previous;
+
+    /*El error es en esta funcion, por eso mostraba el mensaje 1 vez, el case 2 nunca llegaba a ejecutarse por un error en esta funcion.
+      Basicamente si eliminaba un nodo en el index 0 y hacia que la siguiente condicion rompiese el programa.
+		pNode = getNode(this, index);
+		pAuxNode = getNode(this, index-1); -> Linea que deberia romper el programa si mi index es 0.
+		pAuxNode->pNextNode=getNode(this, index+1);
+
+    */
+   if(this != NULL && index > -1){
+    	int len = ll_len(this);
+        Node* pNode = NULL;
+        Node* pAuxNode = NULL;
+
+        if(index < len){
+        	pNode = getNode(this, index);
+        	if(len == 1){
+        		this->pFirstNode = NULL;
+        	} else {
+        		if(index == 0){
+        			this->pFirstNode=pNode->pNextNode;
+        		} else {
+					pAuxNode = getNode(this, index-1);
+					pAuxNode->pNextNode=pNode->pNextNode;
+        		}
+        	}
+        	free(pNode);
+			this->size--;
+			returnAux = 0;
+        }
+
+	}
+    /*if(this != NULL && index > -1){
         int len = ll_len(this);
         Node* pNode = NULL;
         Node* pAuxNode = NULL;
@@ -248,18 +276,16 @@ int ll_remove(LinkedList* this,int index)
         	if(len == 1){
         		pNode = getNode(this, index);
         		this->pFirstNode = NULL;
-        		//free(pNode);
         	} else {
         		pNode = getNode(this, index);
         		pAuxNode = getNode(this, index-1);
         		pAuxNode->pNextNode=getNode(this, index+1);
-        		//free(pNode);
         	}
         	free(pNode);
 			this->size--;
 			returnAux = 0;
         }
-    }
+    }*/
 
     return returnAux;
 }
@@ -321,7 +347,7 @@ int ll_indexOf(LinkedList* this, void* pElement)
 {
     int returnAux = -1;
 
-    if(this != NULL/* && pElement != NULL*/){//Mismo error que el addNode
+    if(this != NULL){
     	int len = ll_len(this);
     	int i;
     	void* pAuxElement = NULL;
@@ -375,7 +401,7 @@ int ll_push(LinkedList* this, int index, void* pElement)
 {
     int returnAux = -1;
 
-    if(this != NULL && index > -1 /*&& pElement != NULL */){//Mismo error addNode
+    if(this != NULL && index > -1){
 
 		int len = ll_len(this);
 
@@ -424,7 +450,7 @@ void* ll_pop(LinkedList* this,int index)
 int ll_contains(LinkedList* this, void* pElement)
 {
     int returnAux = -1;
-    if(this != NULL /*&& pElement != NULL*/){ //Mismo error addNode.
+    if(this != NULL){
     	returnAux = 0;
     	if(ll_indexOf(this,pElement) != -1){
     		returnAux = 1;
@@ -448,27 +474,37 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
     int returnAux = -1;
     int i;
 
-	if(this != NULL && this2 != NULL){
-		returnAux = 1;
+    if(this != NULL && this2 != NULL){
+    	returnAux = 1;
 		void* pElement = NULL;
 		int len = ll_len(this2);
-		//printf("%d\n\n", len);
-		if(ll_isEmpty(this) == 1){
-			for(i=0; i<len; i++){
-				//printf("ROMPE FOR\n\n");
-				pElement = ll_get(this2, i);
-				//printf("ROMPE4\n\n");
-				if(ll_contains(this, pElement) != 0){
-					returnAux = 0;
-					//printf("ROMPE5\n\n");
-					break;
-				}
-			}
 
+		for(i=0;i<len;i++){
+			pElement = ll_get(this2,i);
+			if(ll_contains(this,pElement) == 0){
+				returnAux = 0;
+				break;
+			}
 		}
     }
 
-	//printf("ROMPE6 \n");
+	/*if(this != NULL && this2 != NULL){
+		returnAux = 1;
+		void* pElement = NULL;
+		int len = ll_len(this2);
+		if(ll_isEmpty(this) == 1){
+			for(i=0; i<len; i++){
+				pElement = ll_get(this2, i);
+				if(ll_contains(this, pElement) == 1){
+					continue;
+				} else {
+					returnAux = 0;
+					break;
+				}
+			}
+		}
+    }*/
+
     return returnAux;
 }
 

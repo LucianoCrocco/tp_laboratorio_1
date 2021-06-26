@@ -120,7 +120,7 @@ int findEmployeeById(Employee list[], int len,int id)
 	if(list != NULL && len >= 0){
 		for(i=0;i<len;i++){
 			if(list[i].id == id && list[i].isEmpty == FALSE){
-				return id;
+				return i;
 			}
 		}
 	}
@@ -139,7 +139,7 @@ int askModifyEmployee(Employee list[], int len){
 
 	if(list != NULL && len >= 0){
 		printEmployees(list, len);
-		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, STRING_LENGHT_EEMPLOYEE, reintentos)== 0){
+		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
 			puts("\nError al encontrar el ID del empleado a modificar\n");
 			return 0;
 		}
@@ -158,7 +158,7 @@ int askModifyEmployee(Employee list[], int len){
 			rtn = 1;
 			if(modifyEmployee(list, len, index) == 0){
 				system("cls");
-				puts("\nNo se modificaron los datos del trabajo\n");
+				puts("\nNo se modificaron los datos del empleado\n");
 			} else {
 				system("cls");
 				puts("\nDatos modificados correctamente!\n");
@@ -202,7 +202,7 @@ int modifyEmployee(Employee list[], int len, int index){
 					}
 					break;
 				case 3:
-					if(get_Float(&floatAux, "Ingrese el salario del empleado: ", "Error...", 0, 1000000, retries)== 0){
+					if(get_Float(&floatAux, "Ingrese el salario del empleado: ", "Error...", 0, 1000000, retries) == 0){
 						puts("\nError al cargar el sueldo del nuevo empleado\n");
 					} else {
 						list[index].salary = floatAux;
@@ -210,7 +210,7 @@ int modifyEmployee(Employee list[], int len, int index){
 					}
 					break;
 				case 4:
-					if(get_Integer(&intAux, "Ingrese nuevo numero del sector al que pertenece el empleado (1-15): ", "Error...", 1, 15, retries)== 0){
+					if(get_Integer(&intAux, "Ingrese nuevo numero del sector al que pertenece el empleado (1-15): ", "Error...", 1, 15, retries) == 0){
 						puts("\nError al cargar el sector del nuevo empleado\n");
 					} else {
 						list[index].sector = intAux;
@@ -256,7 +256,7 @@ int askRemoveEmployee(Employee list[], int len){
 		}
 
 		if(index != -1){
-			if(removeEmployee(list, len, index) == 0){
+			if(removeEmployee(list, len, datoABuscar) == 0){
 				rtn = 1;
 			}
 		}
@@ -266,14 +266,13 @@ int askRemoveEmployee(Employee list[], int len){
 }
 int removeEmployee(Employee list[], int len, int id)
 {
-	int i;
+	int index;
 
 	if(list != NULL && len >= 0){
-		for(i=0;i<len;i++){
-			if(list[i].id == id){
-				list[i].isEmpty = TRUE;
-				return 0;
-			}
+		index = findEmployeeById(list, len, id);
+		if(index != -1){
+			list[index].isEmpty = TRUE;
+			return 0;
 		}
 	}
 	return -1;

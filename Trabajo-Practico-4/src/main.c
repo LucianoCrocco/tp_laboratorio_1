@@ -43,10 +43,10 @@ int main(void)
 	//startTesting(13); // ll_push -> BIEN
 	//startTesting(14); // ll_pop -> BIEN
 	//startTesting(15); // ll_contains -> BIEN
-	startTesting(16); // ll_containsAll -> No corre el test, ni siquiera inicia.
+	startTesting(16); // ll_containsAll -> BIEN
 	//startTesting(17); // ll_subList -> BIEN
 	//startTesting(18); // ll_clone -> BIEN
-	//startTesting(19); // ll_sort -> BIEN?
+	//startTesting(19); // ll_sort -> BIEN
 
     return 0;
 }
