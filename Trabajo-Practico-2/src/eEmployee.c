@@ -99,7 +99,7 @@ int addEmployee(Employee list[], int len) {
 			return 0;
 		}
 
-		if(get_Integer(&list[index].sector, "Ingrese el numero del sector al que pertenece el empleado: ", "Error...", 0, 100, retries)== 0){
+		if(get_Integer(&list[index].sector, "Ingrese el numero del sector al que pertenece el empleado (1-15) : ", "Error...", 1, 15, retries)== 0){
 			puts("\nError al cargar el sector del nuevo empleado\n");
 			return 0;
 		}
@@ -119,7 +119,7 @@ int findEmployeeById(Employee list[], int len,int id)
 	int i;
 	if(list != NULL && len >= 0){
 		for(i=0;i<len;i++){
-			if(list[i].id == id){
+			if(list[i].id == id && list[i].isEmpty == FALSE){
 				return id;
 			}
 		}
@@ -139,13 +139,14 @@ int askModifyEmployee(Employee list[], int len){
 
 	if(list != NULL && len >= 0){
 		printEmployees(list, len);
-		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+		if(get_Integer(&datoABuscar, "\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, STRING_LENGHT_EEMPLOYEE, reintentos)== 0){
 			puts("\nError al encontrar el ID del empleado a modificar\n");
 			return 0;
 		}
+
 		index = findEmployeeById(list,len,datoABuscar);
 		while(index == -1 && reintentos > 0){
-			if(get_Integer(&datoABuscar, "\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, INT_MAX, reintentos)== 0){
+			if(get_Integer(&datoABuscar, "\n\t---Error...El ID del empleado ingresado NO es valido---\n\nIngrese el ID del empleado para modificar los datos: ", "Error...", 0, STRING_LENGHT_EEMPLOYEE, reintentos)== 0){
 				puts("\nError al encontrar el ID del empleado a modificar\n");
 				return 0;
 			}
@@ -188,40 +189,44 @@ int modifyEmployee(Employee list[], int len, int index){
 				case 1:
 					if(get_Name(list[index].name, "Ingrese el nuevo nombre del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
 						puts("\nError al cargar el nombre del nuevo empleado\n");
-						return 0;
+					} else {
+						flagCambio++;
 					}
-					flagCambio++;
-
 					break;
 				case 2:
 
 					if(get_Name(list[index].lastName, "Ingrese el nuevo apellido del empleado: ", "Error... los caracteres no son alfabeticos o la capacidad de caracteres fue excedida, capacidad maxima:", retries, STRING_LENGHT_EEMPLOYEE) == 0){
 						puts("\nError al cargar el apellido del nuevo empleado\n");
-						return 0;
+					} else {
+						flagCambio++;
 					}
-					flagCambio++;
 					break;
 				case 3:
 					if(get_Float(&floatAux, "Ingrese el salario del empleado: ", "Error...", 0, 1000000, retries)== 0){
 						puts("\nError al cargar el sueldo del nuevo empleado\n");
-						return 0;
+					} else {
+						list[index].salary = floatAux;
+						flagCambio++;
 					}
-					list[index].salary = floatAux;
-					flagCambio++;
 					break;
 				case 4:
-					if(get_Integer(&intAux, "Ingrese nuevo numero del sector al que pertenece el empleado: ", "Error...", 0, 100, retries)== 0){
+					if(get_Integer(&intAux, "Ingrese nuevo numero del sector al que pertenece el empleado (1-15): ", "Error...", 1, 15, retries)== 0){
 						puts("\nError al cargar el sector del nuevo empleado\n");
-						return 0;
+					} else {
+						list[index].sector = intAux;
+						flagCambio++;
 					}
-					list[index].sector = intAux;
-					flagCambio++;
 					break;
 			}
 		}while(option != 5);
 	} else {
 		rtn = 0;
 	}
+
+	if(flagCambio == 0){
+		rtn = 0;
+	}
+
 	return rtn;
 }
 
