@@ -302,7 +302,8 @@ void subMenuInformar(Employee list[], int len){
 				case 2:
 					aboveAverageSalaryEmployee = printAboveAverageSalary(list, len);
 					if(aboveAverageSalaryEmployee != 0){
-						printf("\nLa cantidad de empleados que superan el promedio del salario es: %d", aboveAverageSalaryEmployee);
+						printf("\nLa cantidad de empleados que superan el promedio del salario es: %d\n\n", aboveAverageSalaryEmployee);
+						printEmployeesAboveAverageSalary(list, len);
 					} else {
 						puts("\nNo hay empleados que superen el promedio de salario\n");
 					}
@@ -386,11 +387,14 @@ int printAboveAverageSalary(Employee list[], int len){
 	int i;
 	float averageSalary;
 	int aboveAverage;
+	float totalSalary;
 
 	aboveAverage = 0;
 
 	if(list != NULL && len >= 0){
+		totalSalary= calculateAllSalary(list,len);
 		averageSalary = calculateAverageSalary(list,len);
+		printf("\nEl salario total es: %.2f\n", totalSalary);
 		printf("\nEl salario promedio es: %.2f", averageSalary);
 		for(i=0;i<len;i++){
 			if(list[i].isEmpty == FALSE && list[i].salary > averageSalary){
@@ -420,4 +424,38 @@ float calculateAverageSalary(Employee list[], int len){
 		}
 	}
 	return accumulator / j;
+}
+
+float calculateAllSalary(Employee list[], int len){
+	float accumulator;
+	int i;
+
+	accumulator = 0;
+
+	if(list != NULL && len >= 0){
+		for(i=0;i<len;i++){
+			if(list[i].isEmpty == FALSE){
+				accumulator += list[i].salary;
+			}
+		}
+	}
+	return accumulator;
+}
+
+int printEmployeesAboveAverageSalary(Employee list[], int len){
+	float average;
+
+	if(list != NULL && len > -1){
+		average = calculateAverageSalary(list, len);
+
+		for(int i = 0;i< len;i++){
+			if(list[i].salary > average && list[i].isEmpty == FALSE){
+				printOneEmployees(list[i]);
+			}
+		}
+
+	} else{
+		return 0;
+	}
+	return 1;
 }

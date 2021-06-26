@@ -227,7 +227,16 @@ int comprobarSoloAlfabetico(char* string, int len){
 }
 
 
-
+/**
+ * \brief	Funcion que permite el ingreso de un dato de tipo enterno (int) con rangos predeterminados
+ * \param pResultado
+ * \param mensaje
+ * \param mensajeError
+ * \param minimo
+ * \param maximo
+ * \param reintentos
+ * \return 1 bien 0 Error o NULL
+ */
 int get_Integer(int* pResultado, char* mensaje, char* mensajeError, int minimo, int maximo, int reintentos){
 
 	int rtn = 0;
@@ -275,6 +284,11 @@ int get_Integer(int* pResultado, char* mensaje, char* mensajeError, int minimo, 
 	return rtn;
 }
 
+/**
+ * \brief Chequea que el entero ingresado no desborde la capicidad de un INT.
+ * \param string
+ * \return 1 bien 0 NULL o error.
+ */
 int check_overFlowSpaceInt(char* string){
 	int rtn = 1;
 	char buffer[STRING_LENGHT_BUFFER];
@@ -323,7 +337,12 @@ int check_overFlowSpaceInt(char* string){
 }
 
 
-
+/**
+ * \brief Verifica que solo se hayan ingresado numeros o '-' o '+' en la primera posicion del string
+ * \param string
+ * \param len
+ * \return 1 bien, 0 NULL o error
+ */
 int check_onlyNumbers(char* string, int len){
 	int i;
 	int rtn = 0;
@@ -360,7 +379,16 @@ int check_onlyNumbers(char* string, int len){
 }
 
 
-
+/**
+ * \brief Funcion que permite el ingreso de un dato de tipo flotante con rangos predeterminados.
+ * \param pResultado
+ * \param mensaje
+ * \param mensajeError
+ * \param minimo
+ * \param maximo
+ * \param reintentos
+ * \return 1 bien 0 error o NULL
+ */
 int get_Float(float* pResultado, char* mensaje, char* mensajeError, float minimo, float maximo, int reintentos){
 
 	int rtn = 0;
@@ -408,7 +436,12 @@ int get_Float(float* pResultado, char* mensaje, char* mensajeError, float minimo
 	return rtn;
 }
 
-
+/**
+ * \brief Verifica que solo se hayan ingresado numeros y '.' (una sola vez) o '-', '+' en la primera posicion del string
+ * \param string
+ * \param len
+ * \return 1 bien 0 NULL o error
+ */
 int check_onlyNumbersFloat(char* string, int len){
 	int i;
 	int rtn = 0;
@@ -447,6 +480,11 @@ int check_onlyNumbersFloat(char* string, int len){
 	return rtn;
 }
 
+/**
+ * \brief Chequea que el flotante ingresado no desborde la capicidad de un FLOAT.
+ * \param string
+ * \return 1 bien, 0 NULL o error.
+ */
 int check_overFlowSpaceFloat(char* string){
 	int rtn = 1;
 	char buffer[STRING_LENGHT_BUFFER];

@@ -178,4 +178,22 @@ int printAboveAverageSalary(Employee list[], int len);
  * @return return float of the average salary
  */
 float calculateAverageSalary(Employee list[], int len);
+
+
+/**
+ * \brief Calcula el salario total entre todos los empleados
+ * \param list
+ * \param len
+ * \return la suma del salario total
+ */
+float calculateAllSalary(Employee list[], int len);
+
+/**
+ * \brief Hace un print de los empleados por encima del promedio de salario.
+ * \param list
+ * \param len
+ * \return 1 bien 0 error o NULL
+ */
+int printEmployeesAboveAverageSalary(Employee list[], int len);
+
 #endif /* EEMPLOYEE_H_ */
