@@ -212,8 +212,6 @@ int ll_set(LinkedList* this, int index,void* pElement)
         	pNode = getNode(this, index);
 			pNode->pElement=pElement;
 			returnAux = 0;
-        	/*if(pNode != NULL){
-        	}*/
         }
     }
 
@@ -233,10 +231,6 @@ int ll_remove(LinkedList* this,int index)//ESTA FUNCION HACE ROMPER EL LL_CONTAI
 {
     int returnAux = -1;
 
-
-    Node* current;
-    Node* previous;
-
     /*El error es en esta funcion, por eso mostraba el mensaje 1 vez, el case 2 nunca llegaba a ejecutarse por un error en esta funcion.
       Basicamente si eliminaba un nodo en el index 0 y hacia que la siguiente condicion rompiese el programa.
 		pNode = getNode(this, index);
@@ -251,19 +245,21 @@ int ll_remove(LinkedList* this,int index)//ESTA FUNCION HACE ROMPER EL LL_CONTAI
 
         if(index < len){
         	pNode = getNode(this, index);
-        	if(len == 1){
-        		this->pFirstNode = NULL;
-        	} else {
-        		if(index == 0){
-        			this->pFirstNode=pNode->pNextNode;
-        		} else {
-					pAuxNode = getNode(this, index-1);
-					pAuxNode->pNextNode=pNode->pNextNode;
-        		}
+        	if(pNode != NULL){
+				if(len == 1){
+					this->pFirstNode = NULL;
+				} else {
+					if(index == 0){
+						this->pFirstNode=pNode->pNextNode;
+					} else {
+						pAuxNode = getNode(this, index-1);
+						pAuxNode->pNextNode=pNode->pNextNode;
+					}
+				}
+				free(pNode);
+				this->size--;
+				returnAux = 0;
         	}
-        	free(pNode);
-			this->size--;
-			returnAux = 0;
         }
 
 	}
@@ -430,9 +426,7 @@ void* ll_pop(LinkedList* this,int index)
 
     if(this != NULL && index > -1){
     	returnAux = ll_get(this, index);
-    	if(returnAux != NULL){
-    		ll_remove(this, index);
-    	}
+		ll_remove(this, index);
     }
 
     return returnAux;
@@ -479,12 +473,16 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 		void* pElement = NULL;
 		int len = ll_len(this2);
 
-		for(i=0;i<len;i++){
-			pElement = ll_get(this2,i);
-			if(ll_contains(this,pElement) == 0){
-				returnAux = 0;
-				break;
+		if(ll_isEmpty(this) == 0){
+			for(i=0;i<len;i++){
+				pElement = ll_get(this2,i);
+				if(ll_contains(this,pElement) == 0){
+					returnAux = 0;
+					break;
+				}
 			}
+		} else {
+			returnAux = 0;
 		}
     }
 
@@ -575,33 +573,63 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
 {
     int returnAux =-1;
 
-    if(this != NULL && pFunc != NULL && (order == 0 || order == 1)){// 0 Descendente || 1 Ascendente
+    if(this != NULL && pFunc != NULL && (order == 0 || order == 1)){
     	int i;
     	int j;
-    	if(ll_isEmpty(this) == 0){
-			int len = ll_len(this);
-    		void* pAux = NULL;
-    		for(i=0;i<len-1;i++){
-    			for(j=i;j<len;j++){
-    				void* pElementOne = ll_get(this, i);
-    				void* pElementTwo = ll_get(this, j);
-    				if(order == 1 && pFunc(pElementOne, pElementTwo) == 1){
-    					pAux = pElementTwo;
-    					ll_set(this, j, pElementOne);
-    					ll_set(this, i, pAux);
-    				}
-    				if(order == 0 && pFunc(pElementOne, pElementTwo) == -1){
-    					pAux = pElementOne;
-    					ll_set(this, i, pElementTwo);
-    					ll_set(this, j, pAux);
-    				}
+    	int len = ll_len(this);
+    	//void* pAux = NULL;//Si no uso un auxiliar, al pisar la funcion no estaria apuntando a distantas direccion pero los elementos no serian los mismos? -> No, ya que antes con los ll_get pido esos elementos en mis void* pElement
+    	/* Tengo 3 posiciones de memoria, entonces cuando hago un ll_set no hago que el puntero pElement apunte a otra posicion de memoria pero el valor original de ese pELement tiene la misma posicion de memoria y no desapareico
+    	 * Por eso la utilizacion del pAux es inutil, ya que no se piso mi direccion de memoria con su valor, solo cambie la direccion.
+    	 *
+    	 */
+    	int condicion;
+    	void* pElementOne;
+		void* pElementTwo;
 
+    	if(ll_isEmpty(this) == 0){
+    		for(i=0;i<len-1;i++){
+				//pElementOne = ll_get(this, i); Por que no funcionaria si lo posiciono aca?
+    			for(j=i+1;j<len;j++){
+    				pElementOne = ll_get(this, i);
+    				pElementTwo = ll_get(this, j);
+    				condicion = pFunc(pElementOne, pElementTwo);
+    				if((order == 0 && condicion == -1) || (order == 1 && condicion == 1)){
+						ll_set(this, i, pElementTwo);
+						ll_set(this, j, pElementOne);
+    				}
     			}
     		}
     		returnAux = 0;
     	}
     }
 
+
+
+/*
+    if(this != NULL && pFunc != NULL && (order == 0 || order == 1)){// 0 Descendente || 1 Ascendente
+    	int i;
+    	int j;
+    	if(ll_isEmpty(this) == 0){
+			int len = ll_len(this);
+    		for(i=0;i<len-1;i++){
+    			for(j=i;j<len;j++){
+    				void* pElementOne = ll_get(this, i);
+    				void* pElementTwo = ll_get(this, j);
+    				if(order == 1 && pFunc(pElementOne, pElementTwo) == 1){
+    					ll_set(this, j, pElementOne);
+    					ll_set(this, i, pElementTwo);
+    				} else {
+						if(order == 0 && pFunc(pElementOne, pElementTwo) == -1){
+							ll_set(this, i, pElementTwo);
+							ll_set(this, j, pElementOne);
+						}
+    				}
+    			}
+    		}
+    		returnAux = 0;
+    	}
+    }
+*/
     return returnAux;
 
 }
